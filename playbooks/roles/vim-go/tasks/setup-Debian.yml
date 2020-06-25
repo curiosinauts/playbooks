@@ -6,8 +6,6 @@
     cache_valid_time: 13600
     update_cache: yes
     name:
-      - python
-      - python-pip
       - git
       - curl
       - sed

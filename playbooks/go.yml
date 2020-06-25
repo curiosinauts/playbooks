@@ -6,7 +6,7 @@
 - name: go
   hosts: "{{ target }}"
   vars: 
-    version: "1.13.5"
+    version: "1.14.4"
   user: "{{ user }}"
   roles:
     - role: go
