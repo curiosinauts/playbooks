@@ -4,7 +4,7 @@
 # Oh My Zsh
 # -------------------------------------------------------------------------------------
 - name: oh-my-zsh
-  hosts: "{{ target }}"
+  hosts: default
   user: "{{ user }}"
   roles:
     - role: oh-my-zsh
