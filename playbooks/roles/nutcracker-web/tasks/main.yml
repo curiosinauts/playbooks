@@ -1,0 +1,81 @@
+---
+# Install Nutcracker Web
+
+- name: Add Nutcracker group
+  group:
+    name: nutcracker
+    state: present
+
+- name: Add Nutcracker user
+  user:
+    name: nutcracker
+    group: nutcracker
+    system: yes
+    state: present
+    home: /etc/nutcracker.d
+    shell: /bin/false
+
+- name: Create /etc/nutcracker.d folder
+  file:
+    path: /etc/nutcracker.d
+    state: directory
+    owner: nutcracker
+    group: nutcracker
+    mode: 0755
+
+- name: Update apt cache
+  apt: 
+    update_cache: yes 
+    cache_valid_time: 3600
+  become: yes
+  become_user: root
+  become_method: sudo     
+
+- name: Copy Nutcracker Web startup script
+  copy:
+    src: files/nutcracker-web.sh
+    dest: /usr/local/bin/nutcracker-web.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Nutcracker Web service script
+  copy:
+    src: files/nutcracker-web.service
+    dest: /etc/systemd/system/nutcracker-web.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nutcracker-web
+
+- name: Install Packages
+  apt: 
+    name:
+      - ruby
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: gem install nutcracker
+  gem:
+    name: nutcracker
+    state: present    
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: gem install nutcracker-web
+  gem:
+    name: nutcracker-web
+    state: present    
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Enable and start Nutcracker Web service
+  service:
+    name: nutcracker-web
+    state: started
+    enabled: yes 

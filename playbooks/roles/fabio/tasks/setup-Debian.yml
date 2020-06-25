@@ -1,0 +1,79 @@
+---
+# Deploy Fabio
+
+- name: Add Fabio group
+  group:
+    name: fabio
+    state: present
+
+- name: Add Fabio user
+  user:
+    name: fabio
+    group: fabio
+    system: yes
+    state: present
+    home: /home/fabio
+    shell: /bin/false
+
+- name: Create /etc/fabio.d folder
+  file:
+    path: /etc/fabio.d
+    state: directory
+    owner: fabio
+    group: fabio
+    mode: 0755
+
+- name: Copy fabio.conf to /etc/fabio.d
+  copy:
+    src: files/fabio.conf
+    dest: /etc/fabio.d/fabio.conf
+    owner: fabio
+    group: fabio
+    mode: 0640
+  notify: restart fabio    
+
+- name: Download Fabio
+  get_url:
+    url: "{{ download_url }}"
+    dest: /usr/local/bin/fabio
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined  
+
+- name: Add Fabio to sudoers
+  copy:
+    src: files/fabio-user-privilege
+    dest: /etc/sudoers.d
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Copy Fabio startup script
+  copy:
+    src: files/fabio.sh
+    dest: /usr/local/bin/fabio.sh
+    owner: root
+    group: root
+    mode: 0755    
+  notify: restart fabio    
+
+- name: Copy Fabio service script
+  copy:
+    src: files/fabio.service
+    dest: /etc/systemd/system/fabio.service
+    owner: root
+    group: root
+    mode: 0644    
+  notify: restart fabio    
+
+- name: Enable Fabio service
+  service:
+    name: fabio
+    state: started
+    enabled: yes    

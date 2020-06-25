@@ -1,0 +1,20 @@
+{
+    "service": {
+      "id": "morgan-server",
+      "name": "morgan-server",
+      "tags": ["urlprefix-/"],
+      "address": "127.0.0.1",
+      "port": 8081,
+      "enable_tag_override": false,
+      "checks": [
+        {
+          "id": "api",
+          "name": "server on port 8081",
+          "http": "http://127.0.0.1:8081/health",
+          "method": "GET",
+          "interval": "10s",
+          "timeout": "2s"
+        }
+      ]
+    }
+  }

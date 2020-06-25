@@ -1,0 +1,30 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Consul local
+# -------------------------------------------------------------------------------------
+- name: consul local
+  hosts: 127.0.0.1
+  connection: local  
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - consul-local
+
+# - name: Set up dummy interface
+#   hosts: 127.0.0.1
+#   connection: local  
+#   tasks:
+#     - name: Execute CLI commands
+#       become: yes    
+#       shell: |
+#         set -e
+#         ip link add dummy0 type dummy
+#         ip link set dev dummy0 up
+#         ip addr add 169.254.1.1/32 dev dummy0 
+#         ip link set dev dummy0 up        
+#         exit 0
+
+# ansible-playbook --extra-vars "consul_cluster_hostname=consul.example.com" consul-local.yml

@@ -1,0 +1,15 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Prometheus
+# -------------------------------------------------------------------------------------
+- name: prometheus
+  hosts: "{{ target }}" 
+  vars: 
+    version: "2.14.0" 
+  user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  roles:
+    - prometheus

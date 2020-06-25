@@ -1,0 +1,19 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Humanoid
+# -------------------------------------------------------------------------------------
+- name: humanoid
+  hosts: "{{ target }}" 
+  user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - humanoid
+  tags:
+    - humanoid
+
+# ansible-playbook -i hosts --extra-vars "target=local bot_access_token=<YOUR_BOT_ACCESS_TOEKN> bot_member_id=<YOUR_BOT_MEMBER_ID>" \
+# master.yml --tags=humanoid

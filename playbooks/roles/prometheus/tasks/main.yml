@@ -1,0 +1,118 @@
+---
+# Deploy Prometheus
+
+- name: Include OS-Specific variables
+  include_vars: "{{ ansible_os_family }}_{{ ansible_architecture }}.yml"
+
+- name: Install Packages
+  apt: 
+    name:
+      - tar
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Add Prometheus group
+  group:
+    name: prometheus
+    state: present
+
+- name: Add Prometheus user
+  user:
+    name: prometheus
+    group: prometheus
+    system: yes
+    state: present
+    home: /etc/prometheus.d
+    shell: /bin/false
+
+- name: Create /opt/prometheus folder
+  file:
+    path: /opt/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: 0755
+
+- name: Download Prometheus
+  unarchive:
+    src: "{{ download_url }}"
+    dest: /tmp/
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined     
+
+- name: Copy unarchived prometheus to /opt/prometheus
+  shell: |
+    cp -rf /tmp/prometheus-{{ version }}.linux-amd64/* /opt/prometheus/
+    chown -R prometheus:prometheus /opt/prometheus/
+    chmod -R 755 /opt/prometheus/
+    rm -rf /tmp/prometheus-{{ version }}.linux-amd64
+    exit 0
+
+- name: Create /opt/prometheus/data folder
+  file:
+    path: /opt/prometheus/data
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: 0755
+
+- name: Copy prometheus.yml to /etc/prometheus.d/
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus.d/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: 0640
+  notify: restart prometheus
+
+- name: Copy Prometheus startup script
+  copy:
+    src: files/prometheus.sh
+    dest: /usr/local/bin/prometheus.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart prometheus    
+
+- name: Copy Prometheus service script
+  copy:
+    src: files/prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart prometheus
+
+- name: Enable and start Prometheus service
+  service:
+    name: prometheus
+    state: started
+    enabled: yes  
+
+- name: Copy Prometheus service definition
+  copy:
+    src: files/prometheus.tpl
+    dest: /etc/consul.d/prometheus.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+    
+- name: Update Prometheus bind address and reload consul to register Prometheus as a service
+  shell: |
+    set -e
+    cd /etc/consul.d/
+    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+    cat prometheus.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > prometheus.json
+    chown consul:consul prometheus.json
+    /usr/local/bin/consul reload
+    exit 0        

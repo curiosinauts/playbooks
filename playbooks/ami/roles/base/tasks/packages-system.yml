@@ -1,0 +1,25 @@
+---
+# Install some helpful system packages
+
+- name: Install system packages (apt version)
+  apt: 
+    name:
+      - git-core
+      - less
+      - sudo
+      - sysstat
+      - unzip
+      - zip
+    state: present
+    autoclean: yes      
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install boto Python library
+  pip: 
+    name: boto
+    state: latest
+
+- name: Install AWS CLI
+  pip:
+    name: awscli
+    state: latest

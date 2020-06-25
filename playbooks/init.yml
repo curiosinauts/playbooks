@@ -1,0 +1,25 @@
+---
+
+# -------------------------------------------------------------------------------------
+# initializes instance 
+# -------------------------------------------------------------------------------------
+- name: set hostname, apt update, apt upgrade
+  hosts: default
+  serial: "{{ serial_size | default(1) }}"
+# serial: 1 means rolling update. that helps to eliminate the time outs on slow computer
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  user: "{{ user }}"
+  tasks:
+    - hostname:
+        name: "{{inventory_hostname}}"
+    - shell: |
+        echo "Acquire::http::Proxy \"http://apt-cache.7onetella.net:3142\";" | tee /etc/apt/apt.conf.d/00proxy
+    - apt:
+        update_cache: yes        
+        upgrade: yes
+  roles:
+    - role: oh-my-zsh
+

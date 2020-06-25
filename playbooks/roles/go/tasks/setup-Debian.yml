@@ -1,0 +1,82 @@
+---
+# Install Go
+
+- name: Delete previous install
+  file:
+    path: /usr/local/go
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined
+
+- name: Download Go for Debian
+  unarchive:
+    src: https://dl.google.com/go/go{{ version }}.linux-amd64.tar.gz
+    dest: /usr/local
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/var/lib/jenkins"
+  when: user == "jenkins"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root" and user != "jenkins"
+
+- name: Copy .profile
+  copy:
+    src: files/.profile
+    dest: "{{ home }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Create HOME/src 
+  file:
+    path: "{{ home }}/src"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Create HOME/bin 
+  file:
+    path: "{{ home }}/bin"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Create HOME/pkg 
+  file:
+    path: "{{ home }}/pkg"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo       

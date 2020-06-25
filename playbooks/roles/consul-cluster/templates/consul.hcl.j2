@@ -1,0 +1,16 @@
+datacenter = "dc1"
+data_dir = "/opt/consul"
+encrypt = "Luj2FZWwlt8475wD1WtwUQ=="
+
+server = true
+bootstrap_expect = 3
+
+ui = true
+
+performance {
+  raft_multiplier = 1
+}
+
+// retry_join = ["provider=aws tag_key=Name tag_value=consul"]
+
+retry_join = [ {% for node in nodes %}{% if loop.index0 > 0 %}, {% endif %}"{{ node }}"{% endfor %} ]

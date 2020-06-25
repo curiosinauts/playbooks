@@ -1,0 +1,236 @@
+---
+# Install Nutcracker
+
+- name: Add Nutcracker group
+  group:
+    name: nutcracker
+    state: present
+
+- name: Add Nutcracker user
+  user:
+    name: nutcracker
+    group: nutcracker
+    system: yes
+    state: present
+    home: /etc/nutcracker.d
+    shell: /bin/false
+
+- name: Create /etc/nutcracker.d folder
+  file:
+    path: /etc/nutcracker.d
+    state: directory
+    owner: nutcracker
+    group: nutcracker
+    mode: 0755
+
+- name: Copy nutcracker.yml.tpl to /etc/nutcracker.d/
+  copy:
+    src: files/nutcracker.yml.tpl
+    dest: /etc/nutcracker.d/nutcracker.yml.tpl
+    owner: nutcracker
+    group: nutcracker
+    mode: 0640
+
+- name: Copy generate-nutcracker-yml.sh to /etc/nutcracker.d/
+  copy:
+    src: files/generate-nutcracker-yml.sh
+    dest: /etc/nutcracker.d/generate-nutcracker-yml.sh
+    owner: nutcracker
+    group: nutcracker
+    mode: 0755
+
+- name: Update apt cache
+  apt: 
+    update_cache: yes 
+    cache_valid_time: 3600
+  become: yes
+  become_user: root
+  become_method: sudo     
+
+- name: Install Twemproxy (nutcracker) prerequesites
+  apt: 
+      update_cache: no
+      name:
+        - gcc
+        - make
+        - libc6
+        - git
+        - git-core
+        - autoconf
+        - libtool
+        - jq
+      state: latest
+      autoclean: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Download gomplate
+  get_url:
+    url: "https://github.com/hairyhenderson/gomplate/releases/download/v3.6.0/gomplate_linux-amd64"
+    dest: /usr/local/bin/gomplate
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined      
+
+- name: Get pwd result
+  shell: pwd
+  register: pwd_result
+  ignore_errors: yes
+  changed_when: pwd_result.rc != 0
+
+- name: Check if Twemproxy's git repository exists
+  shell: cd {{ pwd_result.stdout }}/.twemproxy && git status
+  register: git_repo_existance
+  changed_when: false
+  ignore_errors: yes
+
+- name: Download Twemproxy(nutcracker)
+  git:
+    repo: https://github.com/twitter/twemproxy.git
+    dest: '{{ pwd_result.stdout }}/.twemproxy'
+    accept_hostkey: yes
+  register: get_git_twemproxy
+  when: git_repo_existance.rc != 0
+
+- name: Update Twenproxy(nutcracker)
+  shell: cd {{ pwd_result.stdout }}/.twemproxy && git pull
+  register: git_pull_twemproxy
+  when: get_git_twemproxy is skipped
+  changed_when: git_pull_twemproxy.stdout != "Already up-to-date."
+
+# - name: Assure 'AC_PROG_LIBTOOL' at end of configure.ac
+#   lineinfile: >
+#     dest={{ pwd_result.stdout }}/.twemproxy/configure.ac
+#     line=AC_PROG_LIBTOOL
+#     state=present
+#     insertafter=EOF
+
+- name: Prep twemproxy w/ autoconfig (autoreconf)
+  shell: >
+    cd {{ pwd_result.stdout }}/.twemproxy && autoreconf -fvi
+  when: >
+    get_git_twemproxy is changed
+
+- name: Make twemproxy
+  shell: >
+    cd {{ pwd_result.stdout }}/.twemproxy && ./configure && make
+  when: >
+    get_git_twemproxy is changed
+
+- name: Make Install Twenproxy(nutcracker)
+  shell: "cd {{ pwd_result.stdout }}/.twemproxy && make install"
+  become: yes
+  become_user: root
+  become_method: sudo     
+  when: >
+    get_git_twemproxy is changed
+
+- name: Prep twemproxy w/ autoconfig (autoreconf) (update)
+  shell: >
+    cd {{ pwd_result.stdout }}/.twemproxy && autoreconf -fvi
+  when: >
+    git_pull_twemproxy is changed
+
+- name: Make twemproxy (update)
+  shell: >
+    cd {{ pwd_result.stdout }}/.twemproxy && ./configure && make
+  when: >
+    git_pull_twemproxy is changed
+
+- name: Make Install Twenproxy(nutcracker) (update)
+  shell: "cd {{ pwd_result.stdout }}/.twemproxy && make install"
+  become: yes
+  become_user: root
+  become_method: sudo     
+  when: >
+    git_pull_twemproxy is changed
+
+- name: Verify Twemproxy successfully installed
+  shell: nutcracker -V
+  register: nutcracker_install
+  changed_when: nutcracker_install.rc != 0
+
+- name: Assert Twemproxy installed
+  assert:
+    that: nutcracker_install.stdout.find('This is nutcarcker')
+
+- name: Copy Nutcracker startup script
+  copy:
+    src: files/nutcracker.sh
+    dest: /usr/local/bin/nutcracker.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Nutcracker service script
+  copy:
+    src: files/nutcracker.service
+    dest: /etc/systemd/system/nutcracker.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nutcracker  
+
+- name: Generate nutcracker.yml
+  shell: |
+    set -e
+    cd /etc/nutcracker.d/
+    /etc/nutcracker.d/generate-nutcracker-yml.sh
+    sudo chown nutcracker:nutcracker nutcracker.yml
+    exit 0
+
+- name: Enable and start Nutcracker service
+  service:
+    name: nutcracker
+    state: started
+    enabled: yes 
+
+- name: Install Packages
+  apt: 
+    name:
+      - python-pip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: pip install redis
+  pip:
+    name: redis
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Copy check_nutcracker.py 
+  copy:
+    src: files/check_nutcracker.py
+    dest: /usr/local/bin/check_nutcracker.py
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Nutcracker service definition
+  copy:
+    src: files/nutcracker.tpl
+    dest: /etc/consul.d/nutcracker.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+    
+- name: update Nutcracker bind address and restart consul to register Nutcracker as a service
+  shell: |
+    set -e
+    cd /etc/consul.d/
+    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+    cat nutcracker.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > nutcracker.json
+    chown consul:consul nutcracker.json
+    /usr/local/bin/consul reload
+    exit 0
+    

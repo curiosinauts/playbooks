@@ -1,0 +1,17 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Morgan server
+# -------------------------------------------------------------------------------------
+- name: morgan server
+  hosts: "{{ target }}" 
+  user: ubuntu
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - morgan-server
+
+# deploying to local vagrant instance
+# ansible-playbook --extra-vars "target=local consul_cluster_hostname=consul.example.com" server.yml

@@ -1,0 +1,4 @@
+---
+# Ubuntu
+- name: Installing repo for Java 8 in Ubuntu
+  apt_repository: repo='ppa:openjdk-r/ppa'

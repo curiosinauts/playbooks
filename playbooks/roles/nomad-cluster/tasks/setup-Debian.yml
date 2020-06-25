@@ -1,0 +1,85 @@
+---
+# Install Nomad
+
+- name: Install system dependencies
+  package: 
+    name:
+      unzip
+    state: present
+
+- name: Add Nomad group
+  group:
+    name: nomad
+    state: present
+
+- name: Add Nomad user
+  user:
+    name: nomad
+    group: nomad
+    system: yes
+    state: present
+    home: /etc/nomad.d
+    shell: /bin/false
+
+- name: Create /etc/nomad.d folder
+  file:
+    path: /etc/nomad.d
+    state: directory
+    owner: nomad
+    group: nomad
+    mode: 0755
+
+- name: Create /opt/nomad folder
+  file:
+    path: /opt/nomad
+    state: directory
+    owner: nomad
+    group: nomad
+    mode: 0755
+
+- name: Download Nomad
+  unarchive:
+    src: "{{ download_url }}"
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined 
+
+- name: Copy nomad.hcl to /etc/nomad.d/
+  template:
+    src: nomad.hcl.j2
+    dest: /etc/nomad.d/nomad.hcl
+    owner: nomad
+    group: nomad
+    mode: 0640
+  notify: restart nomad
+
+- name: Copy Nomad startup script
+  copy:
+    src: files/nomad.sh
+    dest: /usr/local/bin/nomad.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart nomad    
+
+- name: Copy Nomad service script
+  copy:
+    src: files/nomad.service
+    dest: /etc/systemd/system/nomad.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nomad
+
+- name: Enable and start nomad service
+  service:
+    name: nomad
+    state: started
+    enabled: yes   

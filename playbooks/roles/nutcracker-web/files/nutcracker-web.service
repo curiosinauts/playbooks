@@ -1,0 +1,17 @@
+[Unit]
+Description="Nutcracker Web"
+Documentation=https://github.com/kontera-technologies/nutcracker-web
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=nutcracker
+Group=nutcracker
+ExecStart=/usr/local/bin/nutcracker-web.sh
+ExecReload=/usr/local/bin/nutcracker-web.sh reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

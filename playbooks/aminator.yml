@@ -1,0 +1,26 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Aminator
+# -------------------------------------------------------------------------------------
+- name: aminator
+  hosts: "{{ target }}"
+  user: ubuntu
+  become: yes
+  become_user: root
+  become_method: sudo
+  roles:   
+    - role: aminator
+  tags:
+  - aminator
+
+# ansible-playbook --extra-vars "target=aminator playbook_user=jenkins" master.yml --tags=aminatoer
+
+# playbook_user variable is for specifying the user that will own ansible playbooks
+# it's common for Aminator to run within Jenkins environment 
+# so it's jenkins instead of ubuntu in the example above
+
+# Note for AWS
+# start ubuntu ec2 instance
+# make sure python is installed by executing ad-hoc remote command
+# ansible aminator --sudo -m raw -a "yum install -y python2"    

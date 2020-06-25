@@ -1,0 +1,20 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Nomad
+# -------------------------------------------------------------------------------------
+- name: nomad
+  hosts: "{{ target_hosts }}"
+  user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars: 
+    version: "0.10.1"
+    nodes: 
+      - "tmt-vm4.7onetella.net"
+      - "tmt-vm5.7onetella.net"
+      - "tmt-vm6.7onetella.net"  
+  roles:
+    - role: nomad-agent

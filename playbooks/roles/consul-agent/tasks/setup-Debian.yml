@@ -1,0 +1,96 @@
+---
+# Deploy Consul cluster
+
+- name: Set hostname
+  hostname:
+    name: "{{inventory_hostname}}"
+
+- name: Include OS-Specific variables
+  include_vars: "{{ ansible_os_family }}_{{ ansible_architecture }}.yml"
+
+- name: Install Packages
+  apt: 
+    name:
+      - unzip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Add Consul group
+  group:
+    name: consul
+    state: present
+
+- name: Add Consul user
+  user:
+    name: consul
+    group: consul
+    system: yes
+    state: present
+    home: /etc/consul.d
+    shell: /bin/false
+
+- name: Create /etc/consul.d folder
+  file:
+    path: /etc/consul.d
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Create /opt/consul folder
+  file:
+    path: /opt/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Copy consul.hcl to /etc/consul.d/
+  template:
+    src: consul.hcl.j2
+    dest: /etc/consul.d/consul.hcl
+    owner: consul
+    group: consul
+    mode: 0640
+  notify: restart consul
+
+- name: Download Consul
+  unarchive:
+    src: "{{ download_url }}"
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined      
+
+- name: Copy Consul startup script
+  copy:
+    src: files/consul.sh
+    dest: /usr/local/bin/consul.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart consul    
+
+- name: Copy Consul service script
+  copy:
+    src: files/consul.service
+    dest: /etc/systemd/system/consul.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart consul    
+
+- name: Enable and start consul service
+  service:
+    name: consul
+    state: started
+    enabled: yes    

@@ -1,0 +1,118 @@
+---
+# Install VIM
+
+- name: Install system packages
+  package: 
+    name:
+      - python
+      - git
+      - curl
+      - gnu-sed
+      - ctags
+      - htop
+      - nodejs
+      - npm
+      - vim
+      - neovim
+      - python3
+    state: present
+
+- name: Clean up
+  shell: |
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python get-pip.py
+    rm get-pip.py
+    exit 0
+  args:
+    warn: no
+
+- name: Install AWS CLI
+  shell: |
+    pip3 install awscli --upgrade --user
+    exit 0
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root"
+
+- name: Copy .vimrc
+  copy:
+    src: files/.vimrc
+    dest: "{{ home }}"
+    owner: "{{ user }}"
+    mode: 0755    
+
+- name: Ensures ~/.vim/autoload exists
+  file: 
+    path: "{{ home }}/.vim/autoload"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755   
+
+- name: Ensures  ~/.vim/bundle exists
+  file: 
+    path:  "{{ home }}/.vim/bundle"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755   
+
+- name: Pathgen
+  get_url:
+    url: https://tpo.pe/pathogen.vim
+    dest: "{{ home }}/.vim/autoload/pathogen.vim"
+    owner: "{{ user }}"
+    mode: 0755 
+
+- name: Tagbar
+  git:
+    repo: https://github.com/majutsushi/tagbar.git
+    dest: "{{ home }}/.vim/bundle/tagbar"
+
+- name: Nerdtree
+  git:
+    repo: https://github.com/scrooloose/nerdtree.git
+    dest: ~/.vim/bundle/nerdtree
+
+- name: Install deoplete dependency
+  shell: |
+    pip3 install --user pynvim
+    exit 0
+  when: skip_download is not defined
+
+- name: Vim Plug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: ~/.vim/autoload/plug.vim
+    owner: "{{ user }}"
+    mode: 0755       
+
+- name: Ensures ~/.vim/colors exists
+  file: 
+    path: ~/.vim/colors 
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755
+
+- name: Install golang tools
+  shell: |
+    export GOPATH={{ home }}
+    export PATH=$PATH:/usr/local/go/bin
+    go get -u github.com/jstemmer/gotags
+    go get -u github.com/tools/godep
+    go get -u github.com/mjibson/esc
+    go get -u github.com/mitchellh/gox
+    go get -u github.com/davecheney/httpstat
+    go get -u github.com/fatih/vim-go-tutorial
+    go get -u github.com/7onetella/dex
+    exit 0
+  when: skip_download is not defined
+#   register: output
+
+# - debug:
+#     var: output

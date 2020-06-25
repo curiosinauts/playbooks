@@ -1,0 +1,6 @@
+---
+
+- name: restart nutcracker
+  service:
+    name: nutcracker
+    state: restarted 

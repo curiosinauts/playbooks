@@ -1,0 +1,65 @@
+---
+# Install Go
+
+- name: Delete previous install
+  file:
+    path: /usr/local/go
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install for Darwin
+  package: 
+    name:
+      gnu-tar
+    state: present
+
+- name: Download Go for Darwin
+  unarchive:
+    src: "https://dl.google.com/go/go{{ version }}.darwin-amd64.tar.gz"
+    dest: /usr/local
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined 
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root"
+
+- name: Copy .profile
+  copy:
+    src: files/.profile
+    dest: "{{ home }}/"
+    owner: "{{ user }}"
+    mode: 0755
+
+- name: Create HOME/src 
+  file:
+    path: "{{ home }}/src"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755
+
+- name: Create HOME/bin 
+  file:
+    path: "{{ home }}/bin"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755
+
+- name: Create HOME/pkg 
+  file:
+    path: "{{ home }}/pkg"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0755

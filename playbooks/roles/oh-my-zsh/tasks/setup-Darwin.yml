@@ -1,0 +1,73 @@
+---
+# Install VIM
+
+- name: Install system packages
+  package: 
+    name:
+      - git
+      - curl
+      - zsh
+    state: present
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root"
+
+- name: Delete previous install
+  file:
+    path: "{{ home }}/.oh-my-zsh"
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Oh My Zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: "{{ home }}/.oh-my-zsh"
+    depth: 1    
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo    
+
+- name: Copy .zshrc
+  copy:
+    src: files/.zshrc
+    dest: "{{ home }}"
+    owner: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: root
+  become_method: sudo      
+
+- name: Copy bullet-train.zsh-theme
+  copy:
+    src: files/bullet-train.zsh-theme
+    dest: "{{ home }}/.oh-my-zsh/themes/"
+    owner: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: root 
+  become_method: sudo      
+#   register: output
+
+# - debug:
+#     var: output
+
+- name: Setting user shell
+  user:
+    name: "{{ user }}"
+    system: yes
+    state: present
+    home: "{{ home }}"
+    shell: /bin/zsh
+  become: yes
+  become_user: root
+  become_method: sudo    
+

@@ -1,0 +1,30 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Base AMI
+# -------------------------------------------------------------------------------------
+- name: base ami
+  user: ubuntu
+  become: yes
+  become_user: root
+  become_method: sudo
+  hosts: all
+  roles:
+    - { role: base, tags: ['base'] }
+  vars_files:
+    - vars/common.yml
+    - vars/{{ ansible_distribution }}.yml
+  tags:
+    - base-ami
+
+# We need -E to carry the injected environment variables into aminator call
+
+# sudo -E aminate -n base -e ec2_ansible_linux -B ${foundation_ami} --extra-vars "ansible_distribution=Ubuntu" \
+# --enhanced-networking \
+# --ena-networking \
+# --arch x86_64 \
+# --provisioner-ebs-type gp2 \
+# --register-ebs-type gp2 \
+# --vm-type hvm \
+# --partition 1 \
+# master.yml

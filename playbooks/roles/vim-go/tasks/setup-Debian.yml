@@ -1,0 +1,151 @@
+---
+# Install VIM
+
+- name: Install system packages
+  apt: 
+    cache_valid_time: 13600
+    update_cache: yes
+    name:
+      - python
+      - python-pip
+      - git
+      - curl
+      - sed
+      - ctags
+      - htop
+      - nodejs
+      - npm
+      - vim
+      - neovim
+      - python3
+      - python3-pip
+    state: present
+    autoclean: yes
+  become: yes
+  become_user: root
+  become_method: sudo      
+
+- name: Install AWS CLI
+  shell: |
+    pip3 install awscli --upgrade --user
+    exit 0
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root"
+
+- name: Copy .vimrc
+  copy:
+    src: files/.vimrc
+    dest: "{{ home }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755    
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Ensures ~/.vim/autoload exists
+  file: 
+    path: "{{ home }}/.vim/autoload"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Ensures  ~/.vim/bundle exists
+  file: 
+    path:  "{{ home }}/.vim/bundle"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Pathgen
+  get_url:
+    url: https://tpo.pe/pathogen.vim
+    dest: "{{ home }}/.vim/autoload/pathogen.vim"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755 
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Tagbar
+  git:
+    repo: https://github.com/majutsushi/tagbar.git
+    dest: "{{ home }}/.vim/bundle/tagbar"
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo        
+
+- name: Nerdtree
+  git:
+    repo: https://github.com/scrooloose/nerdtree.git
+    dest: "{{ home }}/.vim/bundle/nerdtree"
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo        
+
+- name: Install deoplete dependency
+  shell: |
+    pip3 install --user pynvim
+    exit 0
+  when: skip_download is not defined
+
+- name: Vim Plug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ home }}/.vim/autoload/plug.vim"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755 
+  become: yes
+  become_user: root
+  become_method: sudo           
+
+- name: Ensures ~/.vim/colors exists
+  file: 
+    path: "{{ home }}/.vim/colors"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo          
+
+- name: Install golang tools
+  shell: |
+    export GOPATH={{ home }}
+    export PATH=$PATH:/usr/local/go/bin
+    go get github.com/jstemmer/gotags
+    go get github.com/tools/godep
+    go get github.com/mjibson/esc
+    go get github.com/mitchellh/gox
+    go get github.com/davecheney/httpstat
+    go get github.com/fatih/vim-go-tutorial
+    go get github.com/7onetella/dex
+    exit 0
+  when: skip_download is not defined
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo      
+
+#   register: output
+
+# - debug:
+#     var: output

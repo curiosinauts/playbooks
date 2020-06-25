@@ -1,0 +1,25 @@
+---
+# Install password
+
+- name: Copy Password startup script
+  copy:
+    src: files/password.sh
+    dest: /usr/local/bin/password.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Password service script
+  copy:
+    src: files/password.service
+    dest: /etc/systemd/system/password.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable Password service
+  shell: |
+    set -e
+    systemctl enable password
+    systemctl start password
+    exit 0

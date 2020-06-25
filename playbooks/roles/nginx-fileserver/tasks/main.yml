@@ -1,0 +1,74 @@
+---
+# Install Nginx
+
+- name: Install system dependencies
+  package: 
+    name:
+      nginx
+    state: present
+
+- name: Enable and start nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Create /mnt/uploads folder
+  file:
+    path: /mnt/uploads
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Copy Nginx fileserver config file
+  copy:
+    src: files/sites-available/fileserver.cfg
+    dest: /etc/nginx/sites-available/fileserver.cfg
+    mode: 0644
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Symlink for enabling fileserver for Nginx
+  file:
+    src: /etc/nginx/sites-available/fileserver.cfg
+    dest: /etc/nginx/sites-enabled/fileserver
+    owner: root
+    group: root
+    state: link     
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Nginx clean-up
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent     
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Nginx clean-up
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent     
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Restart nginx service
+  service:
+    name: nginx
+    state: restarted
+  become: yes
+  become_user: root
+  become_method: sudo

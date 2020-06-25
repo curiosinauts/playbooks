@@ -1,0 +1,18 @@
+[Unit]
+Description="HashiCorp Nomad - A flexible workload orchestrator"
+Documentation=https://www.nomadproject.io/
+Requires=network-online.target
+After=network-online.target
+After=consul.service
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/local/bin/nomad.sh
+ExecReload=/usr/local/bin/nomad reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

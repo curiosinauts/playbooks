@@ -1,0 +1,23 @@
+{
+  "builders": [
+    {
+      "box_name"    : "7onetella/ubuntu-20.04",
+      "box_version" : "202005.21.0",
+      "output_dir"  : "boxes/7onetella/ubuntu-20.04",
+      "communicator": "ssh",
+      "source_path" : "bento/ubuntu-20.04",
+      "provider"    : "virtualbox",
+      "skip_add"    : false,
+      "type"        : "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "ansible_env_vars": [ "ANSIBLE_STDOUT_CALLBACK=debug" ],
+      "extra_arguments" : [ "-vv", "--extra-vars", "user=vagrant ansible_os_family=Debian" ],
+      "type"            : "ansible",
+      "playbook_file"   : "./playbooks/foundation.yml",
+      "user"            : "vagrant"
+    }
+  ]       
+}

@@ -1,0 +1,14 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Nutcracker Web
+# -------------------------------------------------------------------------------------
+- name: nutcracker web
+  hosts: "{{ target }}"
+  serial: "{{ serial_size | default(2) }}"  
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - nutcracker-web

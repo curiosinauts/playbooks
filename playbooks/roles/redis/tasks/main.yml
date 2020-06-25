@@ -1,0 +1,48 @@
+---
+# check-redis
+
+- name: Copy check_redis.py 
+  copy:
+    src: files/check_redis.py
+    dest: /usr/local/bin/check_redis.py
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install Packages
+  apt: 
+    name:
+      - python-pip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: pip install redis
+  pip:
+    name: redis
+
+- name: copy redis service definition
+  copy:
+    src: files/redis.tpl
+    dest: /etc/consul.d/redis.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: update redis bind address and restart consul to register redis as service
+  shell: |
+    set -e
+    cd /etc/consul.d/
+    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+    cat redis.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > redis.json
+    chown consul:consul redis.json
+    /usr/local/bin/consul reload
+    exit 0
+  # notify:
+  #   - restart consul
+  become: yes
+  become_user: root
+  become_method: sudo
+

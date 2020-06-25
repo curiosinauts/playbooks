@@ -1,0 +1,127 @@
+---
+# Install Consul
+
+- name: Install packages
+  yum: 
+    name: "{{ packages }}"
+  vars:
+    packages:      
+      - systemd-networkd
+    state: present
+  become: yes
+  become_user: root
+  become_method: sudo
+  when: ansible_os_family == 'RedHat'    
+
+- name: Add Consul group
+  group:
+    name: consul
+    state: present
+
+- name: Add Consul user
+  user:
+    name: consul
+    group: consul
+    system: yes
+    state: present
+    home: /etc/consul.d
+    shell: /bin/false
+
+- name: Create /etc/consul.d folder
+  file:
+    path: /etc/consul.d
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Create /opt/consul folder
+  file:
+    path: /opt/consul
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Copy consul.hcl to /etc/consul.d/
+  copy:
+    src: files/consul.hcl
+    dest: /etc/consul.d/consul.hcl
+    owner: consul
+    group: consul
+    mode: 0640
+
+- name: Copy Consul binary
+  copy:
+    src: files/consul
+    dest: /usr/local/bin/consul
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Consul startup script
+  copy:
+    src: files/consul-docker.sh
+    dest: /usr/local/bin/consul.sh
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_os_family == 'RedHat'        
+
+- name: Copy Consul startup script
+  copy:
+    src: files/consul-ec2.sh
+    dest: /usr/local/bin/consul.sh
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_os_family == 'Debian'        
+
+- name: Copy Consul service script
+  copy:
+    src: files/consul.service
+    dest: /etc/systemd/system/consul.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create /etc/systemd/network folder
+  file:
+    path: /etc/systemd/network
+    state: directory
+    owner: root
+    group: root
+    mode: 0755    
+
+- name: Copy dummy0.netdev
+  copy:
+    src: files/dummy0.netdev
+    dest: /etc/systemd/network/dummy0.netdev
+    owner: root
+    group: root
+    mode: 0644    
+
+- name: Copy dummy0.network
+  copy:
+    src: files/dummy0.network
+    dest: /etc/systemd/network/dummy0.network
+    owner: root
+    group: root
+    mode: 0644    
+
+- name: Create a file that contains consul A DNS record name
+  shell: |
+    set -e
+    echo {{ consul_cluster_hostname }} > /etc/consul.d/consul_cluster
+    chown consul:consul /etc/consul.d/consul_cluster
+    chmod 640 /etc/consul.d/consul_cluster
+    exit 0
+
+- name: Enable Consul service
+  shell: |
+    set -e
+    systemctl enable consul
+    systemctl start consul
+    systemctl enable systemd-networkd
+    systemctl start systemd-networkd
+    exit 0

@@ -1,0 +1,13 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Vim Go
+# -------------------------------------------------------------------------------------
+- name: vim-go
+  hosts: "{{ target }}"
+  user: "{{ user }}"
+  roles:
+    - role: vim-go
+  tags:
+    - vim-go  
+# One installation is done. Open up vim then execute :PlugInstall

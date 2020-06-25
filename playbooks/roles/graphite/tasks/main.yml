@@ -1,0 +1,305 @@
+---
+# Install Graphite Server
+
+- name: Install Graphite-Web and Carborn development header packages
+  apt: 
+    name:
+      - python
+      - python-pip
+      - python-dev 
+      - libcairo2-dev 
+      - libffi-dev 
+      - build-essential
+      - expect      
+      - nginx
+      - libsasl2-dev 
+      - libldap2-dev 
+      - libssl-dev
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install Python dependencies
+  pip: 
+    name: 
+      - virtualenv
+      - django
+      - django-tagging
+      - pyparsing
+      - scandir      
+      - urllib3
+      - gunicorn
+      - twisted
+      - cachetools
+      - python-ldap
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Check out Graphite-Web src code
+  git:
+    repo: 'https://github.com/graphite-project/graphite-web.git'
+    dest: /usr/local/src/graphite-web
+    version: 1.1.5
+    depth: 1
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install Graphite-Web 
+  shell: |    
+    python ./setup.py install
+    mkdir -p /var/log/graphite /var/log/nginx /var/log/carbon 
+    pip install https://github.com/pygobject/pycairo/releases/download/v1.13.1/pycairo-1.13.1.tar.gz
+    exit $?
+  args:
+    chdir: /usr/local/src/graphite-web
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Copy Graphite-Web manage.py
+  copy:
+    src: /usr/local/src/graphite-web/webapp/manage.py
+    dest: /opt/graphite/webapp/
+    mode: 0644
+    owner: root
+    group: root
+    remote_src: true
+  become: yes
+  become_user: root
+  become_method: sudo 
+
+- name: Copy local_settings
+  copy:
+    src: files/local_settings.py
+    dest: /opt/graphite/webapp/graphite/
+    mode: 0644
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo 
+
+- name: manage.py collectstatic 
+  shell: |
+    python /opt/graphite/webapp/manage.py collectstatic --noinput
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo       
+  args:
+     executable: /bin/bash  
+
+- name: Check out Whisper src code
+  git:
+    repo: 'https://github.com/graphite-project/whisper.git'
+    dest: /usr/local/src/whisper
+    version: 1.1.5
+    depth: 1
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install Whisper
+  shell: |
+    python ./setup.py install
+    exit $?
+  args:
+    chdir: /usr/local/src/whisper
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Check out Carbon src code
+  git:
+    repo: 'https://github.com/graphite-project/carbon.git'
+    dest: /usr/local/src/carbon
+    version: 1.1.5
+    depth: 1
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install Carbon
+  shell: |
+    python ./setup.py install
+    exit $?
+  args:
+    chdir: /usr/local/src/carbon
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Copy Graphite-Web config files
+  copy:
+    src: "{{item}}"
+    dest: /opt/graphite/conf/
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+    ['files/dashboard.conf','files/graphTemplates.conf']
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Create new database
+  shell: |
+    python /opt/graphite/webapp/manage.py migrate
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo    
+  args:
+     executable: /bin/bash    
+
+- name: Graphite access log file
+  file:
+    path: /var/log/nginx/graphite.access.log
+    state: touch
+    mode: 0640
+    owner: www-data
+    group: www-data    
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Graphite error log file
+  file:
+    path: /var/log/nginx/graphite.error.log
+    state: touch
+    mode: 0640
+    owner: www-data
+    group: www-data    
+  become: yes
+  become_user: root
+  become_method: sudo        
+    
+- name: Copy Nginx config file
+  copy:
+    src: files/etc/nginx/sites-available/graphite
+    dest: /etc/nginx/sites-available/graphite
+    mode: 0644
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Symlink for enabling Graphite for Nginx
+  file:
+    src: /etc/nginx/sites-available/graphite
+    dest: /etc/nginx/sites-enabled/graphite
+    owner: root
+    group: root
+    state: link     
+  become: yes
+  become_user: root
+  become_method: sudo        
+
+- name: Nginx clean-up
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent     
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Nginx clean-up
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent     
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Restart Nginx
+  shell: |
+    systemctl restart nginx
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Copy logrotate config
+  copy:
+    src: files/etc/logrotate.d/graphite
+    dest: /etc/logrotate.d/graphite
+    mode: 0644
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo 
+
+- name: Configure Carbon
+  shell: |
+    cd /opt/graphite/conf
+    cp carbon.conf.example carbon.conf
+    cp storage-schemas.conf.example storage-schemas.conf    
+    cp aggregation-rules.conf.example aggregation-rules.conf
+    cp storage-aggregation.conf.example storage-aggregation.conf
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo      
+
+- name: Copy graphite-run.sh
+  copy:
+    src: files/graphite-run.sh
+    dest: /usr/local/bin/graphite-run.sh
+    mode: 0755
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Copy django_admin_init.exp
+  copy:
+    src: files/django_admin_init.exp
+    dest: /usr/local/bin/django_admin_init.exp
+    mode: 0755
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Create admin user
+  shell: |
+    /usr/local/bin/django_admin_init.exp
+    exit 0
+  become: yes
+  become_user: root
+  become_method: sudo  
+
+- name: Run Graphite Services
+  shell: |
+    /usr/local/bin/graphite-run.sh
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo    
+
+- name: Copy Graphite service definition
+  copy:
+    src: files/etc/consul.d/graphite.tpl
+    dest: /etc/consul.d/nutcracker.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+    
+- name: update Graphite bind address and restart consul to register Graphite as a service
+  shell: |
+    set -e
+    cd /etc/consul.d/
+    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+    cat graphite.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > graphite.json
+    chown consul:consul graphite.json
+    /usr/local/bin/consul reload
+    exit 0

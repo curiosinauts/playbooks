@@ -1,0 +1,60 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Jenkins
+# -------------------------------------------------------------------------------------
+- name: jenkins
+  hosts: "{{ target }}"
+  vars:
+    jenkins_hostname: 127.0.0.1    # if the playbook is run on remote machine, jenkins port must be open. using 127.0.0.1 is to get around this problem while jenkins is getting installed and validated
+    jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
+    jenkins_plugins:
+      - ldap
+      - blueocean
+      - docker-workflow
+      - locale
+      - workflow-aggregator
+      - pipeline-stage-view
+      - git
+      - cloudbees-bitbucket-branch-source
+      - github-organization-folder
+  roles:   
+    - role: geerlingguy.jenkins
+      become: yes
+  tasks:
+    - name: Give Jenkins time to restart before applying the following fix. Do not stop early.
+      pause:
+        seconds: 60
+    - name: Fix a defect to disable setup wizard.
+      jenkins_script:
+        script: |
+          import static jenkins.model.Jenkins.instance as jenkins
+          import jenkins.install.InstallState
+          if (!jenkins.installState.isSetupComplete()) {
+            InstallState.INITIAL_SETUP_COMPLETED.initializeState()
+          }
+        user: "admin"
+        password: "admin"      
+  tags:
+    - jenkins
+
+# keeping a local copy of jenkins to make sure Java 8 is used. 
+# https://github.com/geerlingguy/ansible-role-jenkins/issues/195#issuecomment-487351908
+# Java 11 breaks the install or Jenkins won't start
+# disabled Java 11 dependency in meta/main.yml by commenting out the following
+# dependencies:
+#   - geerlingguy.java
+
+# The following is ldap settings for sample ldap data
+
+# Server: localhost:10389
+# root DN:
+# User search base: dc=example,dc=com
+#	User search filter: uid={0}
+# Group search base: ou=groups,dc=example,dc=com
+# Group search filter: (objectclass=groupOfUniqueNames)
+# Group membership > Search for LDAP groups containing user > Group membership filter: 
+# Manager DN: uid=admin,ou=system
+# Manager Password: secret
+# Display Name LDAP attribute: cn
+# Email Address LDAP attribute: mail

@@ -1,0 +1,24 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Postgres Serve Postgres Server 
+# external install: ansible-galaxy install geerlingguy.postgresql
+# -------------------------------------------------------------------------------------
+- name: postgres
+  hosts: "{{ target }}"
+  roles:
+    - role: geerlingguy.postgresql
+      become: yes
+  vars:
+    postgresql_user: postgres
+    postgresql_group: postgres
+    postgresql_databases:
+      - name: devdb 
+    postgresql_users: 
+      - name: dev 
+        password: dev114 
+    postgresql_hba_entries:
+      - {type: local, database: all, user: postgres, auth_method: peer}
+      - {type: local, database: all, user: all, auth_method: peer}
+      - {type: host, database: all, user: all, address: '0.0.0.0/0', auth_method: md5}
+      - {type: host, database: all, user: all, address: '::1/128', auth_method: md5}

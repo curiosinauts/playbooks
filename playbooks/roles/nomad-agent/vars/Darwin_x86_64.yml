@@ -1,0 +1,2 @@
+---
+download_url: "https://releases.hashicorp.com/nomad/{{ version }}/nomad_{{ version }}_darwin_amd64.zip"

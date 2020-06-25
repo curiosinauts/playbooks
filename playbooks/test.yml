@@ -1,0 +1,36 @@
+---
+
+# -------------------------------------------------------------------------------------
+# test
+# -------------------------------------------------------------------------------------
+- name: debug specified user's home dir through ansible.env
+  hosts: "{{ target }}"
+  user: "{{ user }}"
+  tasks:
+    # - name: debug specified user's home dir through ansible.env
+    #   debug: var=ansible_env.HOME
+    #   become: true
+    #   become_user: "{{ user }}"   
+    # - name: print user
+    #   shell: |
+    #     echo user is {{ ansible_env.HOME }}
+    #     exit 0
+    #   register: ps
+    # - debug: var=ps.stdout_lines
+    # - name: debug specified user's home dir through lookup on env
+    #   debug: var=lookup('env','HOME')
+    #   become: true
+    #   become_user: "root"
+    - set_fact:
+        home: "/root"
+      when: user == "root"
+    - set_fact:
+        home: "/home/{{ user }}"
+      when: user != "root"
+    - name: print
+      shell: |
+        echo home is {{ home }}
+        exit 0
+      register: ps
+    - debug: var=ps.stdout_lines
+

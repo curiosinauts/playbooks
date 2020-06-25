@@ -1,0 +1,18 @@
+[Unit]
+Description="Nutcracker"
+Documentation=https://github.com/twitter/twemproxy
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/nutcracker.d/nutcracker.yml
+
+[Service]
+User=nutcracker
+Group=nutcracker
+ExecStart=/usr/local/bin/nutcracker.sh
+ExecReload=/usr/local/bin/nutcracker reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

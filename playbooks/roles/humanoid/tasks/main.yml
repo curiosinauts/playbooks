@@ -1,0 +1,93 @@
+---
+# Install Humanoid
+
+- name: Add humanoid group
+  group:
+    name: humanoid
+    state: present
+
+- name: Add humanoid user
+  user:
+    name: humanoid
+    group: humanoid
+    system: yes
+    state: present
+    home: /etc/humanoid.d
+    shell: /bin/false
+
+- name: Create /etc/humanoid.d folder
+  file:
+    path: /etc/humanoid.d
+    state: directory
+    owner: humanoid
+    group: humanoid
+    mode: 0755
+
+- name: Copy humanoid-config.ini to /etc/humanoid.d/
+  copy:
+    src: files/humanoid-config.ini
+    dest: /etc/humanoid.d/humanoid-config.ini
+    owner: humanoid
+    group: humanoid
+    mode: 0640
+
+- name: Copy .morgan.ldap.yml to /etc/humanoid.d/
+  copy:
+    src: files/.morgan.ldap.yml
+    dest: /etc/humanoid.d/.morgan.ldap.yml
+    owner: humanoid
+    group: humanoid
+    mode: 0640
+
+- name: Download humanoid binary
+  get_url:
+    url: "https://raw.githubusercontent.com/7onetella/humanoid/master/dist/linux/amd64/humanoid"
+    dest: /usr/local/bin/humanoid
+    owner: root
+    group: root
+    mode: 0755  
+
+- name: Download morgan binary
+  get_url:
+    url: "https://raw.githubusercontent.com/7onetella/morgan/master/dist/linux/amd64/morgan"
+    dest: /usr/local/bin/morgan
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create a file that contains secrets
+  shell: |
+    set -e
+    echo {{ bot_access_token }} > /etc/humanoid.d/bot_access_token
+    chown humanoid:humanoid /etc/humanoid.d/bot_access_token
+    chmod 640 /etc/humanoid.d/bot_access_token
+    echo {{ bot_member_id }} > /etc/humanoid.d/bot_member_id
+    chown humanoid:humanoid /etc/humanoid.d/bot_member_id
+    chmod 640 /etc/humanoid.d/bot_member_id
+    exit 0    
+
+- name: Copy startup script
+  copy:
+    src: files/humanoid.sh
+    dest: /usr/local/bin/humanoid.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy service script
+  copy:
+    src: files/humanoid.service
+    dest: /etc/systemd/system/humanoid.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable service
+  shell: |
+    systemctl enable humanoid
+    exit $?
+
+- name: Start service
+  shell: |
+    systemctl start humanoid
+    exit $? 

@@ -1,0 +1,81 @@
+---
+# Install Oh My Zsh
+
+- name: Install system packages
+  apt: 
+    cache_valid_time: 13600
+    update_cache: yes
+    name:
+      - git
+      - curl
+      - zsh
+    state: present
+    autoclean: yes
+  become: yes
+  become_user: root
+  become_method: sudo      
+
+- name: set home 
+  set_fact:
+    home: "/root"
+  when: user == "root"
+
+- name: set home 
+  set_fact:
+    home: "/home/{{ user }}"
+  when: user != "root"
+
+- name: Delete previous install
+  file:
+    path: "{{ home }}/.oh-my-zsh"
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Oh My Zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: "{{ home }}/.oh-my-zsh"
+    depth: 1    
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo    
+
+- name: Setting user shell
+  user:
+    name: "{{ user }}"
+    group: "{{ user }}"
+    system: yes
+    state: present
+    home: "{{ home }}"
+    shell: /bin/zsh
+  become: yes
+  become_user: root
+  become_method: sudo    
+  
+- name: Copy .zshrc
+  copy:
+    src: files/.zshrc
+    dest: "{{ home }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: root
+  become_method: sudo        
+  
+- name: Copy bullet-train.zsh-theme
+  copy:
+    src: files/bullet-train.zsh-theme
+    dest: "{{ home }}/.oh-my-zsh/themes/"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755   
+  become: yes
+  become_user: "{{ user }}"
+  become_method: sudo      
+#   register: output
+
+# - debug:
+#     var: output

@@ -1,0 +1,6 @@
+---
+
+- name: restart fabio
+  service:
+    name: fabio
+    state: restarted

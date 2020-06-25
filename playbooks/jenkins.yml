@@ -1,0 +1,69 @@
+---
+
+- name: Jenkins Install
+  hosts: "{{ target }}"
+  become: true
+  become_user: root
+  become_method: sudo  
+
+  vars:
+    jenkins_hostname: "tmt-vm17.7onetella.net"
+    jenkins_version: "2.191" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
+    jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
+    jenkins_plugins:
+      - greenballs
+      - ldap
+      - blueocean
+      - docker-workflow
+      - locale
+      - workflow-aggregator
+      - pipeline-stage-view
+      - git
+      - cloudbees-bitbucket-branch-source
+      - github-organization-folder
+    jenkins_home: /var/lib/jenkins
+    jenkins_plugin_timeout: 120
+    jenkins_package_state: present
+
+  pre_tasks:
+    - include_tasks: java8.yml
+
+  roles:
+    - geerlingguy.java
+    - geerlingguy.jenkins
+
+  post_tasks:
+    - name: Give Jenkins time to restart before applying the following fix. Do not stop early.
+      pause:
+        seconds: 60
+    - name: Fix a defect to disable setup wizard.
+      jenkins_script:
+        script: |
+          import static jenkins.model.Jenkins.instance as jenkins
+          import jenkins.install.InstallState
+          if (!jenkins.installState.isSetupComplete()) {
+            InstallState.INITIAL_SETUP_COMPLETED.initializeState()
+          }
+        user: "admin"
+        password: "admin"
+    - name: install latest version of node
+      shell: |
+        curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+        sudo apt-get install -y nodejs 
+        exit $?
+    - name: Copy Jenkins service definition
+      copy:
+        src: jenkins.tpl
+        dest: /etc/consul.d/jenkins.tpl
+        owner: consul
+        group: consul
+        mode: 0755
+    - name: update Graphite bind address and restart consul to register Graphite as a service
+      shell: |
+        set -e
+        cd /etc/consul.d/
+        bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+        cat jenkins.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > jenkins.json
+        chown consul:consul jenkins.json
+        /usr/local/bin/consul reload
+        exit $?

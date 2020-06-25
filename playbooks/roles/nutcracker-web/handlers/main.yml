@@ -1,0 +1,6 @@
+---
+
+- name: restart nutcracker-web
+  service:
+    name: nutcracker-web
+    state: restarted    

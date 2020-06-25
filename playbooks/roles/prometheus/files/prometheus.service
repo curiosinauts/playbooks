@@ -1,0 +1,18 @@
+[Unit]
+Description="Prometheus From metrics to insight Power your metrics and alerting"
+Documentation=https://prometheus.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/prometheus.d/prometheus.yml
+
+[Service]
+User=prometheus
+Group=prometheus
+ExecStart=/usr/local/bin/prometheus.sh
+ExecReload=/usr/local/bin/prometheus reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,38 @@
+version: 1
+
+dn: ou=groups,dc=example,dc=com
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+dn: cn=managers,ou=groups,dc=example,dc=com
+objectclass: groupOfUniqueNames
+objectclass: top
+cn: managers
+uniqueMember: uid=doej,ou=people,dc=example,dc=com
+ou: manager
+
+dn: cn=developers,ou=groups,dc=example,dc=com
+objectclass: groupOfUniqueNames
+objectclass: top
+cn: developers
+uniqueMember: uid=doej,ou=people,dc=example,dc=com
+ou: developer
+
+dn: ou=people,dc=example,dc=com
+objectclass: organizationalUnit
+objectclass: top
+ou: people
+
+dn: uid=doej,ou=people,dc=example,dc=com
+objectclass: organizationalPerson
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: top
+cn: John Doe
+sn: Doe
+mail: doej@example.com
+homePhone: 888-333-2345
+uid: doej
+userPassword: {SSHA}b7fBO2cYnTFyh3qtHnjFASL/KG3HbzBn
+

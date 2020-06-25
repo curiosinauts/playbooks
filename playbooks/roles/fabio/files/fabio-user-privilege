@@ -1,0 +1,2 @@
+# User rules for fabio
+fabio ALL=(ALL) NOPASSWD:ALL

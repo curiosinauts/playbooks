@@ -1,0 +1,16 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Redis
+# -------------------------------------------------------------------------------------
+- name: Redis
+  hosts: "{{ target }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars:
+    redis_bind_interface: "0.0.0.0"
+  roles:
+    - role: geerlingguy.redis
+    - role: redis

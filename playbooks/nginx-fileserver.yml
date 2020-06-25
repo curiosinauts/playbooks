@@ -1,0 +1,14 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Nginx
+# -------------------------------------------------------------------------------------
+- name: nginx
+  hosts: "{{ target_hosts }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  user: "{{ user }}"
+  roles:
+    - role: nginx-fileserver

@@ -1,0 +1,48 @@
+---
+# Install ApacheDS Server
+
+- name: Install ApacheDS deb package 
+  apt:
+    deb: http://mirror.cc.columbia.edu/pub/software/apache/directory/apacheds/dist/2.0.0.AM25/apacheds-2.0.0.AM25-amd64.deb 
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Start ApacheDS Service 
+  shell: |
+    systemctl start apacheds 
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Copy example.ldif
+  copy:
+    src: files/example.ldif
+    dest: "/tmp"
+    owner: "apacheds"
+    group: "apacheds"
+    mode: 0644    
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Install ldap-utils package for import sample.ldif
+  apt: 
+    cache_valid_time: 3600
+    update_cache: yes
+    name:
+      - ldap-utils 
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+# ldap won't allow adding same data, so exit with status code 0 
+- name: Import example.ldif
+  shell: |
+    sleep 5
+    ldapadd -h localhost -p 10389 -D "uid=admin,ou=system" -w secret -f /tmp/example.ldif
+    exit 0
+  become: yes
+  become_user: root
+  become_method: sudo

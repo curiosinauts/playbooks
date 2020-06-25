@@ -1,0 +1,11 @@
+*.deb
+hosts
+scratchpad.sh
+*.retry
+provisioning.md
+Vagrant
+.vagrant
+notes.txt
+*.swp
+boxes
+test
