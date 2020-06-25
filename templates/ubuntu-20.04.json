@@ -3,7 +3,7 @@
     {
       "box_name"    : "7onetella/ubuntu-20.04",
       "box_version" : "202005.21.0",
-      "output_dir"  : "boxes/7onetella/ubuntu-20.04",
+      "output_dir"  : "build/7onetella/ubuntu-20.04",
       "communicator": "ssh",
       "source_path" : "bento/ubuntu-20.04",
       "provider"    : "virtualbox",

@@ -10,7 +10,7 @@ vagrant destroy -f
 
 cd ../..
 
-rm -rf boxes/7onetella/"${box_name}"
+rm -rf build/7onetella/"${box_name}"
 
 rm -rf ~/.vagrant.d/boxes/7onetella-VAGRANTSLASH-"${box_name}"/
 
