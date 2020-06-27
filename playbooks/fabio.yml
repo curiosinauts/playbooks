@@ -5,18 +5,22 @@
 # -------------------------------------------------------------------------------------
 - name: fabio
   hosts: "{{ target }}" 
-  vars: 
-    version: "1.5.12" 
-    go_version: "1.13.1"  
   user: "{{ user }}"
   become: yes
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
+  vars: 
+    fabio_version: "1.5.12" 
+    go_version: "1.13.1"  
+    consul_version: "1.7.2"
+    consul_nodes: 
+      - "tmt-vm1.7onetella.net"
+      - "tmt-vm2.7onetella.net"
+      - "tmt-vm3.7onetella.net"    
   roles:
+    - role: consul-agent
     - role: fabio    
-  tags:
-    - fabio
 
 # Aminate fabio using Ansible
 

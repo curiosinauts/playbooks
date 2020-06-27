@@ -4,10 +4,7 @@
 # Setup/install tasks.
 
 - name: Include OS-Specific variables
-  include_vars: "{{ ansible_os_family }}_{{ ansible_architecture }}.yml"
+  include_vars: "Debian_x86_64.yml"
 
 - include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
-
-- include_tasks: setup-Darwin.yml
-  when: ansible_os_family == 'Darwin'

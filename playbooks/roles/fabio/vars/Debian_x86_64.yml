@@ -1,2 +1,2 @@
 ---
-download_url: "https://github.com/fabiolb/fabio/releases/download/v{{ version }}/fabio-{{ version }}-go{{ go_version }}-linux_amd64"
+download_url: "https://github.com/fabiolb/fabio/releases/download/v{{ fabio_version }}/fabio-{{ fabio_version }}-go{{ go_version }}-linux_amd64"

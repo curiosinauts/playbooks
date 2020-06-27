@@ -1,2 +1,0 @@
----
-download_url: "https://github.com/fabiolb/fabio/releases/download/v{{ version }}/fabio-{{ version }}-go{{ go_version }}-darwin_amd64"

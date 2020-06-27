@@ -75,5 +75,4 @@
 - name: Enable Fabio service
   service:
     name: fabio
-    state: started
     enabled: yes    
