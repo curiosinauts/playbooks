@@ -2,7 +2,7 @@
 # shellcheck disable=SC2037
 
 # get fabio binding address
-bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+bind_addr=$(ip address | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
 
 # start fabio
 /usr/local/bin/fabio \
