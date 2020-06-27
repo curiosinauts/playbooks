@@ -13,7 +13,7 @@
   "provisioners": [
     {
       "ansible_env_vars": [ "ANSIBLE_STDOUT_CALLBACK=debug" ],
-      "extra_arguments" : [ "-v", "--extra-vars", "target=default user=vagrant ansible_os_family=Debian" ],
+      "extra_arguments" : [ "--extra-vars", "target=default user=vagrant ansible_os_family=Debian" ],
       "type"            : "ansible",
       "playbook_file"   : "../playbooks/nomad-cluster.yml",
       "user"            : "vagrant"

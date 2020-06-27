@@ -1,2 +1,2 @@
 ---
-download_url: "https://releases.hashicorp.com/consul/{{ version }}/consul_{{ version }}_darwin_amd64.zip"
+download_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_darwin_amd64.zip"

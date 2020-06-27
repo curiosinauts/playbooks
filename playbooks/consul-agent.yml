@@ -4,15 +4,15 @@
 # Consul agent
 # -------------------------------------------------------------------------------------
 - name: consul agent
-  hosts: "{{ target_hosts }}"
-  user: "{{ ansible_user }}"  
+  hosts: "{{ target }}"
+  user: "{{ user }}"  
   become: yes
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    version: "1.7.2"
-    nodes: 
+    consul_version: "1.7.2"
+    consul_nodes: 
       - "tmt-vm1.7onetella.net"
       - "tmt-vm2.7onetella.net"
       - "tmt-vm3.7onetella.net"    

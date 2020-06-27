@@ -1,2 +1,2 @@
 ---
-download_url: "https://releases.hashicorp.com/consul/{{ version }}/consul_{{ version }}_linux_arm.zip"
+download_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_arm.zip"

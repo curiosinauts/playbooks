@@ -1,2 +1,2 @@
 ---
-download_url: "https://releases.hashicorp.com/nomad/{{ version }}/nomad_{{ version }}_linux_arm.zip"
+download_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_linux_arm.zip"

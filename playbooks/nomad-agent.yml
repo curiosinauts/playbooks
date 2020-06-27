@@ -4,14 +4,14 @@
 # Nomad
 # -------------------------------------------------------------------------------------
 - name: nomad
-  hosts: "{{ target_hosts }}"
+  hosts: "{{ target }}"
   user: "{{ user }}"
   become: yes
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    version: "0.10.1"
+    version: "0.11.3"
     nodes: 
       - "tmt-vm4.7onetella.net"
       - "tmt-vm5.7onetella.net"
