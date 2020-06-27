@@ -81,5 +81,4 @@
 - name: Enable and start nomad service
   service:
     name: nomad
-    state: started
     enabled: yes   
