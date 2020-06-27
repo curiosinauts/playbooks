@@ -20,7 +20,9 @@
     nomad_nodes: 
       - "tmt-vm4.7onetella.net"
       - "tmt-vm5.7onetella.net"
-      - "tmt-vm6.7onetella.net"  
+      - "tmt-vm6.7onetella.net"
+    docker_user: "nomad"        
   roles:
     - role: consul-agent
     - role: nomad-agent
+    - role: docker

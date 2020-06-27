@@ -1,0 +1,41 @@
+---
+# Install Docker
+
+- name: Install system dependencies
+  apt: 
+    name:
+       - apt-transport-https 
+       - ca-certificates 
+       - curl 
+       - software-properties-common
+    state: present
+    autoclean: yes      
+
+- name: install docker-ce
+  shell: |
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"    
+    apt update
+    apt-cache policy docker-ce
+    apt install -y docker-ce
+    usermod -aG docker {{ docker_user }}
+    exit 0
+
+- name: Add Nomad group
+  group:
+    name: nomad
+    state: present
+
+- name: Add Nomad user
+  user:
+    name: nomad
+    group: nomad
+    system: yes
+    state: present
+    home: /etc/nomad.d
+    shell: /bin/false
+
+- name: Enable and start docker service
+  service:
+    name: docker
+    enabled: yes   

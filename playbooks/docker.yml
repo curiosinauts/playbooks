@@ -1,0 +1,16 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Docker
+# -------------------------------------------------------------------------------------
+- name: docker
+  hosts: "{{ target }}"
+  user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - role: docker
+  vars:
+    docker_user: "nomad"
