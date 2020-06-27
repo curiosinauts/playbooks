@@ -5,10 +5,6 @@
 box_name=$2
 
 clean_up() {
-    rm -rf build/7onetella/"${box_name}"
-
-    rm -rf ~/.vagrant.d/boxes/7onetella-VAGRANTSLASH-"${box_name}"/
-
     if [[ -d test/"${box_name}" ]]; then    
         cd test/"${box_name}"
 
@@ -16,6 +12,10 @@ clean_up() {
 
         cd ../..
     fi
+
+    rm -rf build/7onetella/"${box_name}"
+
+    vagrant box remove 7onetella/"${box_name}"
 }
 
 build_image() {
