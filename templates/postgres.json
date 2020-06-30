@@ -1,0 +1,22 @@
+{
+  "builders": [
+    {
+      "box_name"    : "7onetella/postgres",
+      "output_dir"  : "build/7onetella/postgres",
+      "communicator": "ssh",
+      "source_path" : "7onetella/ubuntu-20.04",
+      "provider"    : "virtualbox",
+      "skip_add"    : true,
+      "type"        : "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "ansible_env_vars": [ "ANSIBLE_STDOUT_CALLBACK=debug" ],
+      "extra_arguments" : [ "--extra-vars", "target=default user=vagrant ansible_os_family=Debian" ],
+      "type"            : "ansible",
+      "playbook_file"   : "../playbooks/postgres.yml",
+      "user"            : "vagrant"
+    }
+  ]       
+}

@@ -22,3 +22,14 @@
       - {type: local, database: all, user: all, auth_method: peer}
       - {type: host, database: all, user: all, address: '0.0.0.0/0', auth_method: md5}
       - {type: host, database: all, user: all, address: '::1/128', auth_method: md5}
+    postgres_listen_addresses: "0.0.0.0"
+  tasks:
+  - name: "postgres : Update listen address"
+    become: true
+    lineinfile:
+      dest: "/etc/postgresql/{{ postgresql_version }}/main/conf.d/listen.conf"
+      regexp: '^#?listen_addresses='
+      line: "listen_addresses='{{ postgres_listen_addresses|default('localhost') }}'"
+      state: present
+      create: yes
+    notify: 'restart postgresql'
