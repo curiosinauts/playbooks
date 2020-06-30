@@ -10,6 +10,6 @@ sed 's/__port__/'"5000"'/g'                 \
 > registry.json    
 chown consul:consul registry.json
 
-systemctl start consul
+/usr/local/bin/consul reload
 
 /usr/local/bin/registry serve /etc/docker/registry/config.yml
