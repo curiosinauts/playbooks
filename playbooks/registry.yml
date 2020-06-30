@@ -1,0 +1,20 @@
+---
+
+# -------------------------------------------------------------------------------------
+# registry
+# -------------------------------------------------------------------------------------
+- name: registry
+  hosts: "{{ target }}" 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars: 
+    consul_version: "1.7.2"
+    consul_nodes: 
+      - "tmt-vm1.7onetella.net"
+      - "tmt-vm2.7onetella.net"
+      - "tmt-vm3.7onetella.net"    
+  roles:
+    - role: consul-agent
+    - role: registry
