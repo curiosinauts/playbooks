@@ -9,6 +9,7 @@ sed 's/__ip__/'"${bind_addr}"'/g'         | \
 sed 's/__port__/'"5000"'/g'                 \
 > registry.json    
 chown consul:consul registry.json
-/usr/local/bin/consul reload
+
+systemctl start consul
 
 /usr/local/bin/registry serve /etc/docker/registry/config.yml

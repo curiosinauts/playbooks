@@ -1,20 +1,22 @@
 {
-  "ID": "registry-__uuid__",
-  "Name": "registry",
-  "Tags": [
-    "urlprefix-docker.7onetella.net/"
-  ],
-  "Address": "__ip__",
-  "Port": __port__,
-  "EnableTagOverride": false,
-  "Check": {
-    "DeregisterCriticalServiceAfter": "1m",
-    "Tcp": "__ip__:__port__",
-    "Interval": "10s",
-    "Timeout": "3s"
-  },
-  "Weights": {
-    "Passing": 10,
-    "Warning": 1
+  "service": {
+    "id": "registry-__uuid__",
+    "name": "registry",
+    "tags": [
+      "urlprefix-docker.7onetella.net/"
+    ],
+    "address": "__ip__",
+    "port": __port__,
+    "enable_tag_override": false,
+    "check": {
+      "deregister_critical_service_after": "1m",
+      "tcp": "__ip__:__port__",
+      "interval": "10s",
+      "timeout": "3s"
+    },
+    "weights": {
+      "passing": 10,
+      "warning": 1
+    }
   }
 }
