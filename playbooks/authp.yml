@@ -1,0 +1,16 @@
+---
+
+# -------------------------------------------------------------------------------------
+# Authp Server
+# -------------------------------------------------------------------------------------
+- name: Authp server
+  hosts: "{{ target }}" 
+  user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - authp
+
+# ansible-playbook --extra-vars "target=authp.7onetella.net user=ubuntu" authp.yml
