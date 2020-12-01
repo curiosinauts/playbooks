@@ -1,0 +1,4 @@
+files/.password_secret
+files/keepass-crt.pem
+files/keepass-key.pem
+files/password.sql

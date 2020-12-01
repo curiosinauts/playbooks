@@ -1,6 +1,76 @@
 ---
 # Install password
 
+- name: Install Packages
+  apt: 
+    name:
+      - unzip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Add password group
+  group:
+    name: password
+    state: present
+
+- name: Add password user
+  user:
+    name: password
+    group: password
+    system: yes
+    state: present
+    home: /etc/password.d
+    shell: /bin/false
+
+- name: Download password
+  unarchive:
+    src: "{{ download_url }}"
+    dest: /etc/password.d/
+    owner: password
+    group: password
+    mode: 0755
+    remote_src: yes
+  become: yes
+  become_user: root
+  become_method: sudo       
+  when: 
+    - skip_download is not defined      
+
+- name: Copy Password TLS cert
+  copy:
+    src: files/keepass-crt.pem
+    dest: /etc/password.d
+    owner: password
+    group: password
+    mode: 0644
+
+- name: Copy Password TLS private key
+  copy:
+    src: files/keepass-key.pem
+    dest: /etc/password.d
+    owner: password
+    group: password
+    mode: 0644
+
+- name: Copy Password secret env file
+  copy:
+    src: files/.password_secret
+    dest: /etc/password.d
+    owner: password
+    group: password
+    mode: 0644
+
+- name: Copy Password db dump
+  copy:
+    src: files/password.sql
+    dest: /etc/password.d
+    owner: password
+    group: password
+    mode: 0644
+
 - name: Copy Password startup script
   copy:
     src: files/password.sh
@@ -16,6 +86,14 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Add Password to sudoers
+  copy:
+    src: files/password-user-privilege
+    dest: /etc/sudoers.d
+    owner: root
+    group: root
+    mode: 0440
 
 - name: Enable Password service
   shell: |

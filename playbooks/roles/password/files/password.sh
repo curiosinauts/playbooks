@@ -1,6 +1,6 @@
 #!/bin/sh
 
 # Start password
-. /root/.password_secret
+. /etc/password.d/.password_secret
 
-/root/password
+/etc/password.d/password

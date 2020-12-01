@@ -1,0 +1,2 @@
+---
+download_url: "https://github.com/7onetella/password/releases/download/v{{ password_version }}/password_{{ password_version }}_Linux_x86_64.tar.gz"
