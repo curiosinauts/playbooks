@@ -11,4 +11,4 @@
   any_errors_fatal: true
   user: "{{ user }}"
   roles:
-    - role: nginx-fileserver
+    - role: vagrant-registry

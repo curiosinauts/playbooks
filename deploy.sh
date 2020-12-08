@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# set -x
 
 usage() {
   echo -e "Usage   : deloy.sh <playbook> [<host>] [<user>] [<args>]"  
@@ -20,5 +22,7 @@ deploy() {
 
 if [[ ${1} = "" ]]; then
   usage
+  exit 1
 fi
 
+deploy "${1}" "${2}" "${3}" "${4}"
