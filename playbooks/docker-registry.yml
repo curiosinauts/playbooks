@@ -17,4 +17,4 @@
       - "tmt-vm3.7onetella.net"    
   roles:
     - role: consul-agent
-    - role: registry
+    - role: docker-registry
