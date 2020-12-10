@@ -1,7 +1,7 @@
 {
   "service": {
-    "id": "registry-__uuid__",
-    "name": "registry",
+    "id": "docker-registry-__uuid__",
+    "name": "docker-registry",
     "address": "__ip__",
     "port": __port__,
     "enable_tag_override": false,
