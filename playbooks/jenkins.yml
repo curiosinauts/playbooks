@@ -8,7 +8,7 @@
 
   vars:
     jenkins_hostname: "tmt-vm17.7onetella.net"
-    jenkins_version: "2.191" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
+    jenkins_version: "2.270" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
     jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
     jenkins_plugins:
       - greenballs
@@ -58,7 +58,7 @@
         owner: consul
         group: consul
         mode: 0755
-    - name: update Graphite bind address and restart consul to register Graphite as a service
+    - name: Update Jenkins bind address and restart consul to register Jenkins as a service
       shell: |
         set -e
         cd /etc/consul.d/
@@ -67,3 +67,5 @@
         chown consul:consul jenkins.json
         /usr/local/bin/consul reload
         exit $?
+
+# deploy consul-agent first
