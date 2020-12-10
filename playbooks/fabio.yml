@@ -11,8 +11,8 @@
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    fabio_version: "1.5.12" 
-    go_version: "1.13.1"  
+    fabio_version: "1.5.15" 
+    go_version: "1.15.5"  
     consul_version: "1.7.2"
     consul_nodes: 
       - "tmt-vm1.7onetella.net"
@@ -20,18 +20,4 @@
       - "tmt-vm3.7onetella.net"    
   roles:
     - role: consul-agent
-    - role: fabio    
-
-# Aminate fabio using Ansible
-
-# We need -E to carry the injected environment variables into aminator call
-
-# sudo -E aminate -n fabio -e ec2_ansible_linux -B ${base_ami} --extra-vars "target=all consul_cluster_hostname=consul.example.io" \
-# --enhanced-networking \
-# --ena-networking \
-# --arch x86_64 \
-# --provisioner-ebs-type gp2 \
-# --register-ebs-type gp2 \
-# --vm-type hvm \
-# --partition 1 \
-# fabio.yml    
+    - role: fabio
