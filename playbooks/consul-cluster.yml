@@ -11,24 +11,10 @@
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    version: "1.7.2"
+    version: "1.9.0"
     nodes: 
       - "tmt-vm1.7onetella.net"
       - "tmt-vm2.7onetella.net"
       - "tmt-vm3.7onetella.net"    
   roles:
     - consul-cluster
-
-# Jenkins Job shell script looks like this
-# We need AWS credential for providing aws session
-# 
-# sudo -E aminate -n consul -e ec2_ansible_linux -B ${base_ami} --extra-vars "ansible_distribution=Ubuntu" \
-# --enhanced-networking \
-# --ena-networking \
-# --arch x86_64 \
-# --provisioner-ebs-type gp2 \
-# --register-ebs-type gp2 \
-# --vm-type hvm \
-# --partition 1 \
-# consul-cluster.yml
-
