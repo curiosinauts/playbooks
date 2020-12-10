@@ -12,7 +12,7 @@
   any_errors_fatal: true
   vars: 
     consul_version: "1.7.2"
-    nomad_version: "0.11.3"
+    nomad_version: "1.0.0"
     consul_nodes: 
       - "tmt-vm1.7onetella.net"
       - "tmt-vm2.7onetella.net"

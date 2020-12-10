@@ -35,6 +35,14 @@
     home: /etc/nomad.d
     shell: /bin/false
 
+- name: Copy deamon.json to /etc/docker/
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: nomad
+    group: nomad
+    mode: 0640
+
 - name: Enable and start docker service
   service:
     name: docker
