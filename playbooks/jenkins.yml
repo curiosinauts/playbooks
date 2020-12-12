@@ -24,6 +24,8 @@
     jenkins_home: /var/lib/jenkins
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
+    docker_user: "jenkins"
+    docker_insecure_registry: "docker-registry.7onetella.net:5000"    
 
   pre_tasks:
     - include_tasks: java8.yml
@@ -31,6 +33,7 @@
   roles:
     - geerlingguy.java
     - geerlingguy.jenkins
+    - docker
 
   post_tasks:
     - name: Give Jenkins time to restart before applying the following fix. Do not stop early.

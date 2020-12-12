@@ -12,5 +12,3 @@
   any_errors_fatal: true
   roles:
     - role: docker
-  vars:
-    docker_user: "nomad"
