@@ -1,0 +1,16 @@
+#!/bin/sh
+
+bind_addr=$(ip address | grep eth1 | grep inet | awk '{ print $2 }' | awk -F'/' '{ print $1 }')
+
+cd /etc/consul.d
+sudo rm jupyterlab.json || true
+sudo touch jupyterlab.json || true
+sudo chmod 666 jupyterlab.json || true
+cat jupyterlab.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > jupyterlab.json
+sudo chown consul:consul jupyterlab.json
+sudo systemctl start consul
+/usr/local/bin/consul reload
+
+cd /home/vagrant 
+
+/home/vagrant/.local/bin/jupyter-lab --ip ${bind_addr}

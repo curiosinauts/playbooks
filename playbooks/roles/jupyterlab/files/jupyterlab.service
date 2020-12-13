@@ -1,0 +1,17 @@
+[Unit]
+Description="Jupyter Lab"
+Documentation=https://jupyter.org/index.html
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=vagrant
+Group=vagrant
+ExecStart=/usr/local/bin/jupyterlab.sh
+ExecReload=/usr/local/bin/jupyterlab.sh reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -20,7 +20,6 @@
       - pipeline-stage-view
       - git
       - cloudbees-bitbucket-branch-source
-      - github-organization-folder
     jenkins_home: /var/lib/jenkins
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
@@ -72,3 +71,13 @@
         exit $?
 
 # deploy consul-agent first
+
+# updated /etc/environment PATH. PATH=$PATH:.:~/.local/bin
+
+# pip3 install vag
+
+# download nomad over to ~/.local/bin
+
+# curl -O https://releases.hashicorp.com/nomad/1.0.0/nomad_1.0.0_linux_amd64.zip
+
+# export NOMAD_ADDR=http://nomad.7onetella.net:4646

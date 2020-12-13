@@ -1,0 +1,61 @@
+---
+# Install Jupyter Lab
+
+- name: Install Python dependencies
+  pip: 
+    name: 
+      - jupyterlab
+    extra_args: --user
+    state: latest
+  become: true
+  become_user: "{{ user }}"
+
+- name: Create .jupyter folder
+  file:
+    path: "/home/{{ user }}/.jupyter"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
+- name: Copy password configuration file
+  copy:
+    src: files/jupyter_notebook_config.json
+    dest: /home/vagrant/.jupyter/
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
+- name: Copy startup script
+  template:
+    src: jupyterlab.sh.j2
+    dest: /usr/local/bin/jupyterlab.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy service script
+  copy:
+    src: files/jupyterlab.service
+    dest: /etc/systemd/system/jupyterlab.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy Jupyter Lab service definition
+  copy:
+    src: files/jupyterlab.tpl
+    dest: /etc/consul.d/jupyterlab.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Enable service
+  shell: |
+    systemctl enable jupyterlab
+    exit $?
+
+- name: Start service
+  shell: |
+    systemctl start jupyterlab
+    exit $?
