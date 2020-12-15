@@ -1,6 +1,16 @@
 ---
 # Install Jupyter Lab
 
+- name: Install Packages
+  apt: 
+    name:
+      - uuid
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo
+
 - name: Install Python dependencies
   pip: 
     name: 
@@ -42,6 +52,12 @@
     group: root
     mode: 0644
 
+- name: Enable and start jupyterlab service
+  service:
+    name: jupyterlab
+    state: started
+    enabled: yes        
+
 - name: Copy Jupyter Lab service definition
   copy:
     src: files/jupyterlab.tpl
@@ -50,12 +66,22 @@
     group: consul
     mode: 0755
 
-- name: Enable service
-  shell: |
-    systemctl enable jupyterlab
-    exit $?
+- name: Copy register.sh
+  copy:
+    src: files/register.sh
+    dest: /etc/consul.d/register.sh
+    owner: consul
+    group: consul
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo
 
-- name: Start service
+- name: Register Jupyter Lab with Consul
   shell: |
-    systemctl start jupyterlab
-    exit $?
+    set -e
+    /etc/consul.d/register.sh
+    exit 0    
+  become: yes
+  become_user: root
+  become_method: sudo

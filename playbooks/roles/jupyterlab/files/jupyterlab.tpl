@@ -1,6 +1,6 @@
 {
   "service": {
-    "id": "jupyterlab",
+    "id": "jupyterlab-__uuid__",
     "name": "jupyterlab",
     "tags": ["urlprefix-jupyterlab.7onetella.net/"],
     "address": "",
@@ -10,10 +10,10 @@
     "tagged_addresses": {
       "lan": {
         "address": "__ip__",
-        "port": 8888
+        "port": __port__
       }
     },
-    "port": 8888,
+    "port": __port__,
     "enable_tag_override": false,
     "checks": [
       {
