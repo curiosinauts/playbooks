@@ -4,12 +4,18 @@
 # Prometheus
 # -------------------------------------------------------------------------------------
 - name: prometheus
-  hosts: "{{ target }}" 
-  vars: 
-    version: "2.14.0" 
+  hosts: "{{ target }}"
   user: "{{ user }}"
-  become: yes
+  become: true
   become_user: root
   become_method: sudo  
+  vars:
+    consul_version: "1.9.0"
+    consul_nodes: 
+      - "tmt-vm1.7onetella.net"
+      - "tmt-vm2.7onetella.net"
+      - "tmt-vm3.7onetella.net"    
+    version: "2.14.0"
   roles:
+    - consul-agent
     - prometheus

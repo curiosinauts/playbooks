@@ -1,8 +1,8 @@
 {
   "service": {
-    "id": "prometheus",
+    "id": "prometheus-__uuid__",
     "name": "prometheus",
-    "tags": ["monitoring"],
+    "tags": ["urlprefix-prometheus.7onetella.net/"],
     "address": "",
     "meta": {
       "meta": "monitoring"
@@ -10,10 +10,10 @@
     "tagged_addresses": {
       "lan": {
         "address": "__ip__",
-        "port": 9090
+        "port": __port__
       }
     },
-    "port": 9090,
+    "port": __port__,
     "enable_tag_override": false,
     "checks": [
       {

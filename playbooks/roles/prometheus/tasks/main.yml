@@ -8,6 +8,7 @@
   apt: 
     name:
       - tar
+      - uuid
     state: present
     autoclean: yes      
   become: yes
@@ -107,12 +108,22 @@
     group: consul
     mode: 0755
     
-- name: Update Prometheus bind address and reload consul to register Prometheus as a service
+- name: Copy register.sh
+  copy:
+    src: files/register.sh
+    dest: /etc/consul.d/register.sh
+    owner: consul
+    group: consul
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Register with Consul
   shell: |
     set -e
-    cd /etc/consul.d/
-    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
-    cat prometheus.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > prometheus.json
-    chown consul:consul prometheus.json
-    /usr/local/bin/consul reload
-    exit 0        
+    /etc/consul.d/register.sh
+    exit 0    
+  become: yes
+  become_user: root
+  become_method: sudo
