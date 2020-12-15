@@ -1,8 +1,8 @@
 {
   "service": {
-    "id": "grafana",
+    "id": "grafana-__uuid__",
     "name": "grafana",
-    "tags": ["metrics"],
+    "tags": ["urlprefix-grafana.7onetella.net/"],
     "address": "",
     "meta": {
       "meta": "metrics"
@@ -10,10 +10,10 @@
     "tagged_addresses": {
       "lan": {
         "address": "__ip__",
-        "port": 3000
+        "port": __port__
       }
     },
-    "port": 3000,
+    "port": __port__,
     "enable_tag_override": false,
     "checks": [
       {

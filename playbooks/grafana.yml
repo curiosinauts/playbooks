@@ -6,7 +6,18 @@
 - name: grafana
   hosts: "{{ target }}"
   user: "{{ user }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars: 
+    consul_version: "1.9.0"
+    consul_nodes: 
+      - "tmt-vm1.7onetella.net"
+      - "tmt-vm2.7onetella.net"
+      - "tmt-vm3.7onetella.net"    
   roles:
-  - role: grafana
+    - role: consul-agent
+    - role: grafana
   tags:
     - grafana
