@@ -11,6 +11,12 @@
   any_errors_fatal: true
   vars:
     redis_bind_interface: "0.0.0.0"
+    consul_version: "1.9.0"
+    consul_nodes: 
+      - "tmt-vm1.7onetella.net"
+      - "tmt-vm2.7onetella.net"
+      - "tmt-vm3.7onetella.net"    
   roles:
-    - role: geerlingguy.redis
-    - role: redis
+    - consul-agent  
+    - geerlingguy.redis
+    - redis

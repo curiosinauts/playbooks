@@ -12,7 +12,8 @@
 - name: Install Packages
   apt: 
     name:
-      - python-pip
+      - uuid
+      - python3-pip
     state: present
     autoclean: yes      
   become: yes
@@ -23,7 +24,7 @@
   pip:
     name: redis
 
-- name: copy redis service definition
+- name: Copy redis service definition
   copy:
     src: files/redis.tpl
     dest: /etc/consul.d/redis.tpl
@@ -31,17 +32,22 @@
     group: consul
     mode: 0755
 
-- name: update redis bind address and restart consul to register redis as service
+- name: Copy Grafana service definition
+  copy:
+    src: files/register.sh
+    dest: /etc/consul.d/register.sh
+    owner: consul
+    group: consul
+    mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Register with Consul
   shell: |
     set -e
-    cd /etc/consul.d/
-    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
-    cat redis.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > redis.json
-    chown consul:consul redis.json
-    /usr/local/bin/consul reload
-    exit 0
-  # notify:
-  #   - restart consul
+    /etc/consul.d/register.sh redis
+    exit 0    
   become: yes
   become_user: root
   become_method: sudo

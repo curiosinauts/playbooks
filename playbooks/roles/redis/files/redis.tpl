@@ -1,6 +1,6 @@
 {
   "service": {
-    "id": "redis",
+    "id": "redis-__uuid__",
     "name": "redis",
     "tags": ["shard"],
     "address": "",
@@ -10,10 +10,10 @@
     "tagged_addresses": {
       "lan": {
         "address": "__ip__",
-        "port": 6379
+        "port": __port__
       }
     },
-    "port": 6379,
+    "port": __port__,
     "enable_tag_override": false,
     "checks": [
       {

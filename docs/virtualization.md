@@ -3,7 +3,7 @@
 
 ## **Host server set up**
 ---
-I use ubuntu 18.04 as host server. 
+I use ubuntu 20.04 as host server. 
 
 ### **step 0 - set up apt-cacher-ng server
 https://fabianlee.org/2018/02/11/ubuntu-a-centralized-apt-package-cache-using-apt-cacher-ng/
