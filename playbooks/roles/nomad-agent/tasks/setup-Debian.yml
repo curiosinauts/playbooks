@@ -1,6 +1,13 @@
 ---
 # Install Nomad
 
+- name: Fix missing
+  shell: |
+    apt-get update --fix-missing   
+  become: yes
+  become_user: root
+  become_method: sudo  
+
 - name: Install system dependencies
   package: 
     name:
@@ -50,6 +57,14 @@
   become_method: sudo       
   when: 
     - skip_download is not defined 
+
+- name: Copy sysctl.conf
+  copy:
+    src: files/sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Copy nomad.hcl to /etc/nomad.d/
   template:
