@@ -13,7 +13,6 @@ server {
 
 client {
   enabled       = true
-  network_speed = 1024
   servers = [ {% for node in nomad_nodes %}{% if loop.index0 > 0 %}, {% endif %}"{{ node }}"{% endfor %} ]
   network_interface = "eth1"
 }
@@ -25,6 +24,11 @@ plugin "raw_exec" {
 }
 
 plugin "docker" {
+  config {
+    volumes {
+      enabled      = true
+    }
+  }
 }
 
 consul {
