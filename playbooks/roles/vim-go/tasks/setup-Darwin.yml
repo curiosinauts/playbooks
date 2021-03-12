@@ -38,7 +38,7 @@
 
 - name: set home 
   set_fact:
-    home: "/home/{{ user }}"
+    home: "/Users/{{ user }}"
   when: user != "root"
 
 - name: Copy .vimrc

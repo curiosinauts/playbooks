@@ -1,6 +1,6 @@
 #!/bin/sh
 
 # Start Authp
-. /root/.authp_secret
+. /root/.secret
 
-/root/authp
+/root/api_linux_amd64

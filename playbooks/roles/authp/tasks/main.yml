@@ -3,8 +3,8 @@
 
 - name: Copy Server binary
   copy:
-    src: files/authp
-    dest: /root/authp
+    src: files/api_linux_amd64
+    dest: /root/api_linux_amd64
     owner: root
     group: root
     mode: 0755

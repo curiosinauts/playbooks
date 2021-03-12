@@ -12,5 +12,3 @@
   any_errors_fatal: true
   roles:
     - authp
-
-# ansible-playbook --extra-vars "target=authp.7onetella.net user=ubuntu" authp.yml
