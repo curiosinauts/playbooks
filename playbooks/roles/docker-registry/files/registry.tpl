@@ -2,6 +2,7 @@
   "service": {
     "id": "docker-registry-__uuid__",
     "name": "docker-registry",
+    "tags": ["urlprefix-docker-registry.7onetella.net/"],
     "address": "__ip__",
     "port": __port__,
     "enable_tag_override": false,
