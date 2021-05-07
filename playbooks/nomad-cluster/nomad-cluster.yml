@@ -4,23 +4,23 @@
 # Nomad
 # -------------------------------------------------------------------------------------
 - name: nomad
-  hosts: "{{ target }}"
-  user: "{{ user }}"
+  hosts: "{{ target_hosts }}"
+  user: "{{ ansible_user }}"
   become: yes
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    consul_version: "1.7.2"
+    consul_version: "1.9.0"
     nomad_version: "1.0.0"
     consul_nodes: 
-      - "tmt-vm1.7onetella.net"
-      - "tmt-vm2.7onetella.net"
-      - "tmt-vm3.7onetella.net"    
+      - "{{consul_node1}}"
+      - "{{consul_node2}}"
+      - "{{consul_node3}}"    
     nomad_nodes: 
-      - "tmt-vm4.7onetella.net"
-      - "tmt-vm5.7onetella.net"
-      - "tmt-vm6.7onetella.net"
+      - "{{node1}}"
+      - "{{node2}}"
+      - "{{node3}}"
   roles:
     - role: consul-agent
     - role: nomad-cluster
