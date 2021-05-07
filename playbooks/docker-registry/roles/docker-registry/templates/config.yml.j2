@@ -11,7 +11,7 @@ storage:
     rootdirectory: /var/lib/registry
 http:
   addr: :5000
-  host: https://docker-registry.7onetella.net
+  host: {{ host_url }}
   headers:
     X-Content-Type-Options: [nosniff]
     Access-Control-Allow-Origin: ['*']

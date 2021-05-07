@@ -17,8 +17,8 @@
     mode: 0755
 
 - name: Copy config.yml to /etc/docker/registry/
-  copy:
-    src: files/config.yml
+  template:
+    src: config.yml.j2
     dest: /etc/docker/registry/config.yml
     owner: root
     group: root
@@ -48,7 +48,7 @@
     group: root
     mode: 0644
 
-- name: copy redis service definition
+- name: copy registry service definition
   copy:
     src: files/registry.tpl
     dest: /etc/consul.d/registry.tpl
