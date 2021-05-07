@@ -1,6 +1,6 @@
-# How to use run this playbook
 
-# deploy.sh
+
+# Prerequisite
 This script assumes you have you have your inventory defined in /etc/ansible/hosts
 ```
 [consul_cluster]
@@ -14,6 +14,7 @@ ansible_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
 
+# Run the playbook with deploy.sh
 `consul-cluster.yml` playbook expects three node cluster. Enter FQDN node host names.
 ```
 $ ./deploy.sh consul_cluster
@@ -23,4 +24,9 @@ Enter node2 hostname: node2.example.com
 Enter node3 hostname: node3.example.com
 
 Enter ansible_user [vagrant]: 
+
+PLAY [consul cluster] *************************************************
+
+TASK [Gathering Facts ]************************************************
+...
 ```
