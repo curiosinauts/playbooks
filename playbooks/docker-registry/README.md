@@ -4,7 +4,7 @@
 This script assumes you have you have your inventory defined in /etc/ansible/hosts
 ```
 [docker_registry]
-node7.example.com
+node10.example.com
 
 [all:vars]
 ansible_connection=ssh
@@ -17,7 +17,9 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 # Run the playbook with deploy.sh
 `docker-registry.yml` playbook expects three consul node cluster. Enter FQDN node host names.
 ```
-$ ./deploy.sh nomad_cluster
+$ ./deploy.sh docker_registry
+
+Enter host_url (e.g. https://docker-registry.example.com): https://docker-registry.example.com
 
 Enter consul node1 hostname: node1.example.com
 Enter consul node2 hostname: node2.example.com
