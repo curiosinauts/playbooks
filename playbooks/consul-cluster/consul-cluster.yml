@@ -4,7 +4,7 @@
 # Consul cluster
 # -------------------------------------------------------------------------------------
 - name: consul cluster
-  hosts: "{{ target }}"
+  hosts: "{{ target_hosts }}"
   user: "{{ ansible_user }}"  
   become: yes
   become_user: root
@@ -13,8 +13,8 @@
   vars: 
     version: "1.9.0"
     nodes: 
-      - "tmt-vm1.7onetella.net"
-      - "tmt-vm2.7onetella.net"
-      - "tmt-vm3.7onetella.net"    
+      - "{{node1}}"
+      - "{{node2}}"
+      - "{{node3}}"    
   roles:
     - consul-cluster
