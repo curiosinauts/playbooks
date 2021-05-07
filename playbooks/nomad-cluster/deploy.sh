@@ -10,6 +10,7 @@ usage() {
 }
 
 export ANSIBLE_STDOUT_CALLBACK=debug
+export ANSIBLE_ROLES_PATH=./roles:../roles
 
 if [ "${1}" = "" ]; then
     usage

@@ -1,8 +1,0 @@
-encrypt = "Luj2FZWwlt8475wD1WtwUQ=="
-data_dir = "/opt/consul"
-server = false
-ui = true
-enable_local_script_checks = true
-
-retry_join = [ {% for node in consul_nodes %}{% if loop.index0 > 0 %}, {% endif %}"{{ node }}"{% endfor %} ]
-
