@@ -40,6 +40,14 @@
     group: root
     mode: 0755
 
+- name: Copy garbage_collect.sh script
+  copy:
+    src: files/garbage_collect.sh
+    dest: /root/garbage_collect.sh
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Copy service script
   copy:
     src: files/registry.service
