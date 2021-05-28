@@ -1,0 +1,63 @@
+---
+
+# ansible-galaxy install thomas_maurice.ansible_role_gitea
+# 
+# IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# https://unix.stackexchange.com/questions/633010/ansible-issue-when-using-ansible-builtin-shell
+#
+# ansible.builtin.shell => just shell fix made manually from ~/.ansible/roles/.....
+# try upgrading Ansible
+#
+# -------------------------------------------------------------------------------------
+# Gitea
+# -------------------------------------------------------------------------------------
+- name: "Install gitea"
+  hosts: "{{ target_hosts }}"
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars:
+    gitea_user: "gitea"
+    gitea_home: "/var/lib/gitea"
+    # To limit your users to 30 repos
+    gitea_user_repo_limit: 30
+    # Don't use a public CDN for frontend assets
+    gitea_offline_mode: false
+
+    # Some 'rendering' options for your URLs
+    gitea_http_domain: "{{ server_domain }}"
+    gitea_root_url: "https://{{ server_domain }}"
+
+    # Here we assume we are behind a reverse proxy that will
+    # handle https for us, so we bind on localhost:3000 using HTTP
+    gitea_protocol: http
+    gitea_http_listen: 0.0.0.0
+    gitea_http_port: 3000
+
+    # SSH server configuration
+    gitea_ssh_listen: 0.0.0.0
+    gitea_ssh_port: 2222
+    # For URLs rendering again
+    gitea_ssh_domain: "{{ server_domain }}"
+    gitea_start_ssh: true
+
+    # used in encrypting passwords
+    gitea_secret_key: "{{ secret_key }}"
+    gitea_disable_gravatar: true
+    # To make at least your first user register
+    gitea_disable_registration: false
+    gitea_require_signin: true
+    gitea_enable_captcha: true
+
+    gitea_show_user_email: false
+
+    consul_version: "1.9.0"
+    consul_nodes: 
+      - "{{ consul_node1 }}"
+      - "{{ consul_node2 }}"
+      - "{{ consul_node3 }}"    
+  roles:
+    - role: consul-agent
+    - role: thomas_maurice.ansible_role_gitea
+    - role: consul-registration

@@ -1,0 +1,37 @@
+---
+# Register Gitea with Consul
+
+- name: Install Packages
+  apt: 
+    name:
+      - uuid
+    state: present
+    autoclean: yes      
+
+- name: Copy gitea service definition
+  copy:
+    src: files/gitea.tpl
+    dest: /etc/consul.d/gitea.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Copy gitea script
+  copy:
+    src: files/gitea.sh
+    dest: /etc/consul.d/gitea.sh
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Register with Consul
+  shell: |
+    /etc/consul.d/gitea.sh    
+    exit $?
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+
+
+
