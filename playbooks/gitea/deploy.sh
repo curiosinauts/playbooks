@@ -18,8 +18,9 @@ if [ "${1}" = "" ]; then
 fi
 
 echo
-read -p "Enter server domain : " server_domain
-read -p "Enter secret key    : " secret_key
+read -p "Enter server domain         : " server_domain
+read -p "Enter git-ssh server domain : " git_ssh_server_domain
+read -p "Enter secret key            : " secret_key
 echo
 read -p "Enter consul node1 hostname: " consul_node1
 read -p "Enter consul node2 hostname: " consul_node2
@@ -28,4 +29,4 @@ echo
 read -p "Enter ansible_user [vagrant]: " ansible_user
 ansible_user=${ansible_user:-vagrant}
 
-ansible-playbook -e "target_hosts=${1} ansible_user=${ansible_user} server_domain=${server_domain} secret_key=${secret_key} consul_node1=${consul_node1} consul_node2=${consul_node2} consul_node3=${consul_node3}" gitea.yml    
+ansible-playbook -e "target_hosts=${1} ansible_user=${ansible_user} server_domain=${server_domain} git_ssh_server_domain=${git_ssh_server_domain} secret_key=${secret_key} consul_node1=${consul_node1} consul_node2=${consul_node2} consul_node3=${consul_node3}" gitea.yml    

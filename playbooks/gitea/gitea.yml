@@ -39,7 +39,7 @@
     gitea_ssh_listen: 0.0.0.0
     gitea_ssh_port: 2222
     # For URLs rendering again
-    gitea_ssh_domain: "{{ server_domain }}"
+    gitea_ssh_domain: "{{ git_ssh_server_domain }}"
     gitea_start_ssh: true
 
     # used in encrypting passwords
