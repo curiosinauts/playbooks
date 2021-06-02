@@ -8,18 +8,16 @@
 
   vars:
     jenkins_hostname: "{{ target }}"
-    jenkins_version: "2.270" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
+    jenkins_version: "2.295" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
     jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
     jenkins_plugins:
       - greenballs
-      - ldap
       - blueocean
       - docker-workflow
       - locale
       - workflow-aggregator
       - pipeline-stage-view
       - git
-      - cloudbees-bitbucket-branch-source
     jenkins_home: /var/lib/jenkins
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
@@ -47,7 +45,7 @@
             InstallState.INITIAL_SETUP_COMPLETED.initializeState()
           }
         user: "admin"
-        password: "admin"
+        password: "{{ admin_password }}"
     - name: Copy Jenkins service definition
       copy:
         src: jenkins.tpl

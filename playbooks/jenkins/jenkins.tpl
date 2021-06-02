@@ -1,6 +1,6 @@
 {
   "service": {
-    "id": "jenkins-__uuid_",
+    "id": "jenkins-__uuid__",
     "name": "jenkins",
     "tags": ["urlprefix-jenkins.7onetella.net/"],
     "address": "__ip__",
