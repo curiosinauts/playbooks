@@ -20,11 +20,12 @@
       - git
       - role-strategy
       - authorize-project
+      - docker-plugin # https://github.com/jenkinsci/docker-plugin/issues/821 make sure Jack 2 API plugin is upgraded to the latest
     jenkins_home: /var/lib/jenkins
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
     docker_user: "jenkins"
-    docker_insecure_registry: ""    
+    docker_insecure_registry: "http://localhost:5000" # the ansible role expects this    
 
   pre_tasks:
     - include_tasks: ../java8.yml
