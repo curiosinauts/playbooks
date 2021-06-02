@@ -18,7 +18,7 @@
     "checks": [
       {
         "deregister_critical_service_after": "1m",
-        "args": ["/usr/bin/curl", "-f", "-s", "-I", "http://0.0.0.0:8080"],
+        "args": ["/usr/bin/curl", "-f", "-s", "-I", "http://0.0.0.0:8080/login"],
         "interval": "10s"
       }
     ]
