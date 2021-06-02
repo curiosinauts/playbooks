@@ -19,6 +19,7 @@
       - pipeline-stage-view
       - git
       - role-strategy
+      - authorize-project
     jenkins_home: /var/lib/jenkins
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
