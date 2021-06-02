@@ -7,7 +7,7 @@
   become_method: sudo  
 
   vars:
-    jenkins_hostname: "tmt-vm17.7onetella.net"
+    jenkins_hostname: "{{ target }}"
     jenkins_version: "2.270" # https://github.com/geerlingguy/ansible-role-jenkins/issues/269
     jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
     jenkins_plugins:
@@ -24,15 +24,15 @@
     jenkins_plugin_timeout: 120
     jenkins_package_state: present
     docker_user: "jenkins"
-    docker_insecure_registry: "docker-registry.7onetella.net:5000"    
+    docker_insecure_registry: ""    
 
   pre_tasks:
-    - include_tasks: java8.yml
+    - include_tasks: ../java8.yml
 
   roles:
-    - geerlingguy.java
-    - geerlingguy.jenkins
-    - docker
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins
+    - role: docker
 
   post_tasks:
     - name: Give Jenkins time to restart before applying the following fix. Do not stop early.
@@ -48,11 +48,6 @@
           }
         user: "admin"
         password: "admin"
-    - name: install latest version of node
-      shell: |
-        curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-        sudo apt-get install -y nodejs 
-        exit $?
     - name: Copy Jenkins service definition
       copy:
         src: jenkins.tpl
@@ -60,24 +55,21 @@
         owner: consul
         group: consul
         mode: 0755
+    - name: Install Packages
+      apt: 
+        name:
+          - uuid
+        state: present
+        autoclean: yes      
     - name: Update Jenkins bind address and restart consul to register Jenkins as a service
       shell: |
         set -e
         cd /etc/consul.d/
+        UUID=$(uuid)
         bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
-        cat jenkins.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > jenkins.json
+        cat jenkins.tpl                                   | \ 
+        sed 's/__uuid__/'"${UUID}"'/g'                    | \
+        sed 's/__ip__/'"${bind_addr}"'/g' > jenkins.json
         chown consul:consul jenkins.json
         /usr/local/bin/consul reload
         exit $?
-
-# deploy consul-agent first
-
-# updated /etc/environment PATH. PATH=$PATH:.:~/.local/bin
-
-# pip3 install vag
-
-# download nomad over to ~/.local/bin
-
-# curl -O https://releases.hashicorp.com/nomad/1.0.0/nomad_1.0.0_linux_amd64.zip
-
-# export NOMAD_ADDR=http://nomad.7onetella.net:4646

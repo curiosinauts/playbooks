@@ -1,9 +1,9 @@
 {
   "service": {
-    "id": "jenkins",
+    "id": "jenkins-__uuid_",
     "name": "jenkins",
-    "tags": ["buids"],
-    "address": "",
+    "tags": ["urlprefix-jenkins.7onetella.net/"],
+    "address": "__ip__",
     "meta": {
       "meta": "buids"
     },
@@ -17,6 +17,7 @@
     "enable_tag_override": false,
     "checks": [
       {
+        "deregister_critical_service_after": "1m",
         "args": ["/usr/bin/curl", "-f", "-s", "-I", "http://0.0.0.0:8080"],
         "interval": "10s"
       }
