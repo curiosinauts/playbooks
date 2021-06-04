@@ -13,10 +13,10 @@
     postgresql_user: postgres
     postgresql_group: postgres
     postgresql_databases:
-      - name: devdb 
+      - name: "{{ db_name }}" 
     postgresql_users: 
-      - name: dev 
-        password: dev114 
+      - name: "{{ user_name }}" 
+        password: "{{ user_password }}"
     postgresql_hba_entries:
       - {type: local, database: all, user: postgres, auth_method: peer}
       - {type: local, database: all, user: all, auth_method: peer}
