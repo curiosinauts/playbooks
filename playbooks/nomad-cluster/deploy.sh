@@ -20,10 +20,16 @@ echo
 read -p "Enter consul node1 hostname: " consul_node1
 read -p "Enter consul node2 hostname: " consul_node2
 read -p "Enter consul node3 hostname: " consul_node3
+consul_node1=${consul_node1:-tmt-vm1.7onetella.net}
+consul_node2=${consul_node2:-tmt-vm2.7onetella.net}
+consul_node3=${consul_node3:-tmt-vm3.7onetella.net}
 echo
 read -p "Enter nomad node1 hostname: " node1
 read -p "Enter nomad node2 hostname: " node2
 read -p "Enter nomad node3 hostname: " node3
+node1=${node1:-tmt-vm4.7onetella.net}
+node2=${node2:-tmt-vm5.7onetella.net}
+node3=${node3:-tmt-vm6.7onetella.net}
 echo
 read -p "Enter ansible_user [vagrant]: " ansible_user
 ansible_user=${ansible_user:-vagrant}
