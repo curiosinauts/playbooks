@@ -1,36 +1,15 @@
-
-
 # Prerequisite
-This script assumes you have you have your inventory defined in /etc/ansible/hosts
+Inventory file, hosts is created by deploy.sh script. This script works on one database at a time.
 ```
-[nomad_cluster]
-node[1:3].example.com
+$ ./deploy.sh
 
-[all:vars]
-ansible_connection=ssh
-ansible_user=vagrant
-ansible_port=22
-ansible_private_key_file=~/.ssh/id_rsa
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-```
+Enter vm instance ip address  : 192.168.0.244
+Enter db name                 : test
+Enter db user name            : test
+Enter db user password        : test114
 
-# Run the playbook with deploy.sh
-`nomad-cluster.yml` playbook expects three node cluster. Enter FQDN node host names.
-```
-$ ./deploy.sh nomad_cluster
+Enter ansible_user [debian]   :
+Enter postgresql version [11] :
 
-Enter consul node1 hostname: node1.example.com
-Enter consul node2 hostname: node2.example.com
-Enter consul node3 hostname: node3.example.com
-
-Enter nomad node1 hostname: node4.example.com
-Enter nomad node2 hostname: node5.example.com
-Enter nomad node3 hostname: node6.example.com
-
-Enter ansible_user [vagrant]: 
-
-PLAY [consul cluster] *************************************************
-
-TASK [Gathering Facts ]************************************************
 ...
 ```

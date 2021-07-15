@@ -5,7 +5,7 @@
 # external install: ansible-galaxy install geerlingguy.postgresql
 # -------------------------------------------------------------------------------------
 - name: postgres
-  hosts: "{{ target }}"
+  hosts: databases 
   roles:
     - role: geerlingguy.postgresql
       become: yes
@@ -23,6 +23,9 @@
       - {type: host, database: all, user: all, address: '0.0.0.0/0', auth_method: md5}
       - {type: host, database: all, user: all, address: '::1/128', auth_method: md5}
     postgres_listen_addresses: "0.0.0.0"
+    postgresql_python_library: python3-psycopg2
+    # postgres_users_no_log: false
+    ansible_python_interpreter: /usr/bin/python3
   tasks:
   - name: "postgres : Update listen address"
     become: true

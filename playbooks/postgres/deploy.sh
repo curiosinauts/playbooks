@@ -17,12 +17,17 @@ if [ "${1}" = "-h" ]; then
     exit 0
 fi
 echo
-read -p "Enter target host            : " target
-read -p "Enter db name                : " db_name
-read -p "Enter db user name           : " user_name
-read -p "Enter db user password       : " user_password
+read -p "Enter vm instance ip address  : " ip_address
+read -p "Enter db name                 : " db_name
+read -p "Enter db user name            : " user_name
+read -p "Enter db user password        : " user_password
 echo
-read -p "Enter ansible_user [vagrant] : " ansible_user
+read -p "Enter ansible_user [debian]   : " ansible_user
 ansible_user=${ansible_user:-vagrant}
+read -p "Enter postgresql version [11] : " postgresql_version
+postgresql_version=${postgresql_version:-11} 
 
-ansible-playbook -e "target=${target} db_name=${db_name} user_name=${user_name} user_password=${user_password}" postgres.yml    
+cat hosts_template > hosts
+echo ${ip_address} >> hosts 
+
+ansible-playbook -i hosts -e "db_name=${db_name} user_name=${user_name} user_password=${user_password} postgresql_version=${postgresql_version}" postgres.yml    
