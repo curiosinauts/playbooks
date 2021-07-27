@@ -1,4 +1,4 @@
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-prod
@@ -19,7 +19,7 @@ spec:
     # as part of a solver's selector too.
     - selector:
         dnsNames:
-        - "*.curiosityworks.org"
+        - nginx.curiosityworks.org
       dns01:
         cloudflare:
           email: 7onetella@gmail.com
