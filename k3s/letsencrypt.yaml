@@ -1,0 +1,30 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: default
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 7onetella@gmail.com
+
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-prod
+
+    # ACME DNS-01 provider configurations
+    solvers:
+    # We only use cloudflare to solve challenges for foo.com.
+    # Alternative options such as 'matchLabels' and 'dnsZones' can be specified
+    # as part of a solver's selector too.
+    - selector:
+        dnsNames:
+        - "*.curiosityworks.org"
+      dns01:
+        cloudflare:
+          email: 7onetella@gmail.com
+          # !! Remember to create a k8s secret before
+          # kubectl create secret generic cloudflare-api-key
+          apiKeySecretRef:
+            name: cloudflare-api-key-secret
+            key: api-key

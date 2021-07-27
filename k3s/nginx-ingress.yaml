@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/issuer: letsencrypt-prod
+spec:
+  tls:
+    - secretName: nginx-curiosityworks-org-tls
+      hosts:
+        - nginx.curiosityworks.org
+  rules:
+  - host: nginx.curiosityworks.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port: 
+              number: 80           
