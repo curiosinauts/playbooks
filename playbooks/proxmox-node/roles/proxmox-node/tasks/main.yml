@@ -1,0 +1,52 @@
+---
+
+- name: Install system dependencies
+  package: 
+    name:
+      - cloud-init
+    state: present
+
+- name: Delete /etc/machine-id
+  file:
+    state: absent
+    path: /etc/machine-id
+
+- name: Delete /var/lib/dbus/machine-id
+  file:
+    state: absent
+    path: /var/lib/dbus/machine-id
+
+- name: Touch /etc/machine-id
+  file:
+    state: touch
+    path: /etc/machine-id
+
+- name: Create symlink to machine-id
+  file:
+    src: /etc/machine-id
+    dest: /var/lib/dbus/machine-id
+    owner: root
+    group: root
+    state: link
+
+- name: Copy cloud.cfg /etc/cloud/
+  template:
+    src: files/cloud.cfg
+    dest: /etc/cloud/cloud.cfg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy NoCloud datasource file
+  template:
+    src: files/99-fake_cloud.cfg
+    dest: /etc/cloud/cloud.cfg.d/99-fake_cloud.cfg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Clean up
+  shell: |
+    set -e
+    cloud-init clean
+    exit 0    
