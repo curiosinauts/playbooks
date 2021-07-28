@@ -3,7 +3,7 @@
 - name: Install system dependencies
   package: 
     name:
-      - cloud-init
+      cloud-init
     state: present
 
 - name: Delete /etc/machine-id
@@ -49,4 +49,5 @@
   shell: |
     set -e
     cloud-init clean
+    cat /dev/null > ~/.bash_history
     exit 0    

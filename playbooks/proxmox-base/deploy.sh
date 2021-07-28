@@ -25,8 +25,8 @@ echo
 read -p "Enter ansible_user    : " ansible_user
 ansible_user=${ansible_user:-temp}
 
-cat hosts_template > hosts
+cat hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
-ansible-playbook -i hosts -e "ansible_user=${ansible_user}" proxmox-node.yml    
+ansible-playbook -i hosts -e "ansible_user=${ansible_user}" proxmox-base.yml    
 
