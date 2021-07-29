@@ -34,14 +34,14 @@ if [ "${1}" == "consul" ]; then
   read -p "Enter consul node3 hostname: " consul_node3
   echo
 
-  cat hosts.tpl > hosts
+  cat ../hosts.tpl > hosts
   echo "${ip_address}" >> hosts 
 
   ansible-playbook -i hosts -e "setup_option=${1} host_url=${host_url} ansible_user=${ansible_user} consul_node1=${consul_node1} consul_node2=${consul_node2} consul_node3=${consul_node3}" docker-registry.yml    
 fi
 
 if [ "${1}" == "noconsul" ]; then
-  cat hosts.tpl > hosts
+  cat ../hosts.tpl > hosts
   echo "${ip_address}" >> hosts 
 
   ansible-playbook -i hosts -e "setup_option=${1} host_url=${host_url} ansible_user=${ansible_user} consul_node1=${consul_node1} consul_node2=${consul_node2} consul_node3=${consul_node3}" docker-registry.yml    

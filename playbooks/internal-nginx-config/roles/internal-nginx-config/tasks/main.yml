@@ -1,0 +1,9 @@
+---
+
+- name: Copy nginx.conf 
+  copy:
+    src: files/nginx.conf 
+    dest: /etc/nginx/nginx.conf 
+    mode: 0644
+    owner: root
+    group: root
