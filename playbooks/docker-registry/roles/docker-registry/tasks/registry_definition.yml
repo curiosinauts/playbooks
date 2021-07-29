@@ -1,0 +1,9 @@
+---
+
+- name: copy registry service definition
+  copy:
+    src: files/registry.tpl
+    dest: /etc/consul.d/registry.tpl
+    owner: consul
+    group: consul
+    mode: 0755
