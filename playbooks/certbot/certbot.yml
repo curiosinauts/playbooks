@@ -1,0 +1,13 @@
+---
+
+- name: certbot 
+  hosts: nodes 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars: 
+    email: "{{email}}"
+    api_key: "{{api_key}}"
+  roles:
+    - certbot 

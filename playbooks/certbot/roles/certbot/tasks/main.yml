@@ -1,0 +1,55 @@
+---
+
+- name: Install snapd
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+    name:
+      - snapd
+    state: present      
+
+
+- name: Install "certbot" with option --classic
+  community.general.snap:
+    name: certbot
+    classic: yes
+
+
+- name: Ensure that your version of snapd is up to date
+  shell: |
+    sudo snap install core; sudo snap refresh core
+
+
+- name: Prepare the Certbot command
+  file:
+    src: "/snap/bin/certbot"
+    dest: "/usr/bin/certbot"
+    state: link    
+
+
+- name: Ensure that your version of snapd is up to date
+  shell: |
+    sudo snap set certbot trust-plugin-with-root=ok
+
+
+- name: Install correct DNS plugin
+  community.general.snap:
+    name: certbot-dns-cloudflare
+
+
+- name: Create credentials folder
+  file:
+    path: /root/.secrets/certbot/
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+
+- name: Set up credentials
+  template:
+    src: cloudflare.ini.j2
+    dest: /root/.secrets/certbot/cloudflare.ini
+    owner: root
+    group: root
+    mode: 0600
