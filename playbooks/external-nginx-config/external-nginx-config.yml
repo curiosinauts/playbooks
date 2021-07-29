@@ -1,0 +1,10 @@
+---
+
+- name: external-nginx-config 
+  hosts: nodes 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - external-nginx-config 
