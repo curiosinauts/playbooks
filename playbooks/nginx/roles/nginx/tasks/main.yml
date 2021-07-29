@@ -1,0 +1,11 @@
+---
+# Nginx
+
+- name: Install Nginx Repo
+  shell: |
+    curl -L https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+    touch /etc/apt/sources.list.d/nginx.list
+    echo 'deb http://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list.d/nginx.list
+    echo 'deb-src http://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list.d/nginx.list 
+    sudo apt-get update    
+    apt install nginx
