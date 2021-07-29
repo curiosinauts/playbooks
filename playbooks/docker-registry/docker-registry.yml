@@ -4,7 +4,7 @@
 # registry
 # -------------------------------------------------------------------------------------
 - name: registry
-  hosts: "{{ target_hosts }}" 
+  hosts: nodes 
   become: yes
   become_user: root
   become_method: sudo  
@@ -16,6 +16,7 @@
       - "{{consul_node1}}"
       - "{{consul_node2}}"
       - "{{consul_node3}}"    
+    setup_option: "{{setup_option}}"
   roles:
     - role: consul-agent
     - role: docker-registry

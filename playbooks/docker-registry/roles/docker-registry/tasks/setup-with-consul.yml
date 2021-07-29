@@ -1,0 +1,74 @@
+---
+# Install Docker Registry
+
+- name: Install Packages
+  apt: 
+    name:
+      - uuid
+    state: present
+    autoclean: yes      
+
+- name: Create /etc/docker/registry/ folder
+  file:
+    path: /etc/docker/registry/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy config.yml to /etc/docker/registry/
+  template:
+    src: config.yml.j2
+    dest: /etc/docker/registry/config.yml
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Download registry binary
+  get_url:
+    url: "https://raw.githubusercontent.com/docker/distribution-library-image/master/amd64/registry"
+    dest: /usr/local/bin/registry
+    owner: root
+    group: root
+    mode: 0755  
+
+- name: Copy startup script
+  copy:
+    src: files/registry.sh
+    dest: /usr/local/bin/registry.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy garbage_collect.sh script
+  copy:
+    src: files/garbage_collect.sh
+    dest: /root/garbage_collect.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy service script
+  copy:
+    src: files/registry.service
+    dest: /etc/systemd/system/registry.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy registry service definition
+  copy:
+    src: files/registry.tpl
+    dest: /etc/consul.d/registry.tpl
+    owner: consul
+    group: consul
+    mode: 0755
+
+- name: Enable registry service
+  service:
+    name: registry
+    enabled: yes    
+
+
+
+
