@@ -1,10 +1,53 @@
 ---
-# Install Docker
 
-# Setup/install tasks.
+- name: Install system dependencies
+  apt: 
+    name:
+      - apt-transport-https 
+      - ca-certificates 
+      - curl 
+      - gnupg 
+      - lsb-release
+    state: present
+    autoclean: yes      
 
-- include_tasks: setup-Debian.yml
-  when: ansible_os_family == 'Debian'
+- name: Install docker-ce
+  shell: |
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --batch --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo \
+    "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+    sudo usermod -aG docker {{ docker_user }}
+    exit 0
+  register: output
 
-- include_tasks: setup-Darwin.yml
-  when: ansible_os_family == 'Darwin'
+- name: Capture docker-ce install output
+  debug:
+    var: output.stdout_lines
+
+- name: Add Nomad group
+  group:
+    name: nomad
+    state: present
+  when: setup_option == 'consul'
+
+- name: Add Nomad user
+  user:
+    name: nomad
+    group: nomad
+    system: yes
+    state: present
+    home: /etc/nomad.d
+    shell: /bin/false
+  when: setup_option == 'consul'
+
+- name: Enable and start docker service
+  service:
+    name: docker
+    enabled: yes   
+
+- name: Install docker driver
+  shell: |
+    docker plugin install --grant-all-permissions rchicoli/docker-log-elasticsearch:latest --alias elasticsearch || true
