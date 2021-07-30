@@ -25,20 +25,17 @@ fi
 echo
 read -p "Enter node ip address             : " ip_address
 echo
-read -p "Enter jenkins hostname            : " jenkins_host
-echo
 read -p "Enter ansible user     [debian]   : " ansible_user
 echo
 read -p "Enter admin password   [admin]    : " admin_password
 
 ip_address=${ip_address:-192.168.0.108}
-jenkins_host=${jenkins_host:-localhost}
 ansible_user=${ansible_user:-debian}
 admin_password=${admin_password:-admin}
 
 cat ../hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
-ansible-playbook -i hosts -e "setup_option=${1} jenkins_host=${jenkins_host} ansible_user=${ansible_user} admin_password=${admin_password}" jenkins.yml    
+ansible-playbook -i hosts -e "setup_option=${1} ansible_user=${ansible_user} admin_password=${admin_password}" jenkins.yml    
 
 rm -f hosts || true
