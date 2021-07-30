@@ -3,12 +3,14 @@
 # set -x
 
 usage() {
-  echo -e "Usage   : deloy.sh"  
+  echo -e "Usage   : deloy.sh [<setup_option>]"  
   echo
-  echo -e 'Example : deloy.sh"'
+  echo -e 'Example : deloy.sh consul'
   echo
-  echo -e "Enter jenkins hostname [tmt-vm17] : "
-  echo -e "Enter ansible_user     [vagrant]  : "
+  echo -e "Enter jenkins hostname            : "
+  echo
+  echo -e "Enter ansible_user     [debian]   : "
+  echo
   echo -e "Enter admin password   [admin]    : ****"
 }
 
@@ -21,12 +23,22 @@ if [ "${1}" = "-h" ]; then
 fi
 
 echo
-read -p "Enter jenkins hostname [tmt-vm17] : " jenkins_host
-read -p "Enter ansible user     [vagrant]  : " ansible_user
+read -p "Enter node ip address             : " ip_address
+echo
+read -p "Enter jenkins hostname            : " jenkins_host
+echo
+read -p "Enter ansible user     [debian]   : " ansible_user
+echo
 read -p "Enter admin password   [admin]    : " admin_password
 
-jenkins_host=${jenkins_host:-tmt-vm17.7onetella.net}
-ansible_user=${ansible_user:-vagrant}
+ip_address=${ip_address:-192.168.0.108}
+jenkins_host=${jenkins_host:-localhost}
+ansible_user=${ansible_user:-debian}
 admin_password=${admin_password:-admin}
 
-ansible-playbook -e "target=${jenkins_host} jenkins_host=${jenkins_host} ansible_user=${ansible_user} admin_password=${admin_password}" jenkins.yml    
+cat ../hosts.tpl > hosts
+echo "${ip_address}" >> hosts
+
+ansible-playbook -i hosts -e "setup_option=${1} jenkins_host=${jenkins_host} ansible_user=${ansible_user} admin_password=${admin_password}" jenkins.yml    
+
+rm -f hosts || true
