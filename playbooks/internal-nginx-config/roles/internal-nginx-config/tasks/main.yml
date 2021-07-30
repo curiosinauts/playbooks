@@ -7,3 +7,9 @@
     mode: 0644
     owner: root
     group: root
+
+- name: Restart nginx
+  shell: |
+    set -e
+    nginx -t 
+    systemctl restart nginx
