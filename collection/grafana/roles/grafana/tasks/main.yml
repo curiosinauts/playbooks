@@ -61,6 +61,7 @@
   become: yes
   become_user: root
   become_method: sudo
+  when: setup_option == 'consul'
 
 - name: Copy Grafana service definition
   copy:
@@ -72,6 +73,7 @@
   become: yes
   become_user: root
   become_method: sudo
+  when: setup_option == 'consul'
 
 - name: Register Grafana with Consul
   shell: |
@@ -81,3 +83,4 @@
   become: yes
   become_user: root
   become_method: sudo
+  when: setup_option == 'consul'

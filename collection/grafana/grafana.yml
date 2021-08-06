@@ -4,8 +4,7 @@
 # Grafana
 # -------------------------------------------------------------------------------------
 - name: grafana
-  hosts: "{{ target }}"
-  user: "{{ user }}"
+  hosts: nodes
   become: yes
   become_user: root
   become_method: sudo  
@@ -18,6 +17,7 @@
       - "tmt-vm3.7onetella.net"    
   roles:
     - role: consul-agent
+      when: setup_option == 'consul'
     - role: grafana
   tags:
     - grafana
