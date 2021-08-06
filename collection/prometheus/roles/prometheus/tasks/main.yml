@@ -107,6 +107,7 @@
     owner: consul
     group: consul
     mode: 0755
+  when: setup_option == 'consul'
     
 - name: Copy register.sh
   copy:
@@ -118,6 +119,7 @@
   become: yes
   become_user: root
   become_method: sudo
+  when: setup_option == 'consul'  
 
 - name: Register with Consul
   shell: |
@@ -127,3 +129,4 @@
   become: yes
   become_user: root
   become_method: sudo
+  when: setup_option == 'consul'
