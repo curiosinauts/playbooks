@@ -27,7 +27,7 @@
   
 - name: Add nodexporter user
   user:
-    name: nodexporter
+    name: nodeexporter
     group: nodeexporter
     system: yes
     state: present
