@@ -1,0 +1,59 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - unzip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Download node exporter 
+  unarchive:
+    src: "https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    extra_opts: [--strip-components=1]
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+  
+- name: Add node exporter group
+  group:
+    name: nodeexporter
+    state: present
+  
+- name: Add nodexporter user
+  user:
+    name: nodexporter
+    group: nodeexporter
+    system: yes
+    state: present
+    home: /etc/node-exporter.d
+    shell: /bin/false
+
+- name: Copy node exporter startup script
+  copy:
+    src: files/node-exporter.sh
+    dest: /usr/local/bin/node-exporter.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart node-exporter    
+
+- name: Copy node-exporter service script
+  copy:
+    src: files/node-exporter.service
+    dest: /etc/systemd/system/node-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart node-exporter 
+
+- name: Enable and start node exporter service
+  service:
+    name: node-exporter
+    state: started
+    enabled: yes    

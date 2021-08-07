@@ -1,0 +1,18 @@
+[Unit]
+Description="Node exporter"
+Documentation=https://prometheus.io/docs/guides/node-exporter/
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=nodeexporter
+Group=nodeexporter
+ExecStart=/usr/local/bin/node-exporter.sh
+ExecReload=/usr/local/bin/node_exporter reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
