@@ -17,8 +17,8 @@
     version: "2.14.0"
     targets:
       - "localhost:9090"
-      - "192.168.0.107"
-      - "192.168.0.108" 
+      - "192.168.0.107:9100"
+      - "192.168.0.108:9100" 
   roles:
     - role: consul-agent
       when: setup_option == 'consul'
