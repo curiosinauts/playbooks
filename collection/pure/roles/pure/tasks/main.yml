@@ -1,0 +1,45 @@
+---
+
+- name: Install git
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+    name:
+      - git
+      - zsh
+    state: present      
+
+
+- name: Check out pure repo under ~/.zsh for user
+  shell: |
+    chsh --shell /usr/bin/zsh {{ username }}
+    mkdir -p "/home/{{ username }}/.zsh"
+    git clone https://github.com/sindresorhus/pure.git "/home/{{ username }}/.zsh/pure"
+    chown -R {{ username }}:{{ username }} /home/{{ username }}/.zsh
+    touch /home/{{ username }}/.hushlogin 
+
+
+- name: Check out pure repo under ~/.zsh for root
+  shell: |
+    chsh --shell /usr/bin/zsh root 
+    mkdir -p "/root/.zsh"
+    git clone https://github.com/sindresorhus/pure.git "/root/.zsh/pure"
+    chown -R root:root /root/.zsh
+
+
+- name: Copy .zshrc for user 
+  copy:
+    src: files/.zshrc 
+    dest: /home/{{username}} 
+    mode: 0644
+    owner: root
+    group: root
+
+
+- name: Copy .zshrc for root 
+  copy:
+    src: files/.zshrc 
+    dest: /root 
+    mode: 0644
+    owner: root
+    group: root

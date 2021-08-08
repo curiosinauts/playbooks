@@ -1,0 +1,12 @@
+---
+
+- name: pure 
+  hosts: nodes 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars:
+    - username: "{{ username }}"
+  roles:
+    - pure 
