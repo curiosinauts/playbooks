@@ -3,8 +3,11 @@
 $ ./deploy.sh 
 
 Enter node ip address       :
+
 Enter ansible_user [debian] :
+
 Enter email                 :
+
 Enter api_key               : xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
 
 PLAY [certbot] **********************************************************************************************************************************************************************************************************************************************
