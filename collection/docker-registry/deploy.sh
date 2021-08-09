@@ -18,14 +18,12 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address       : " ip_address
+read -p "Enter node ip address                                     : " ip_address
 ip_address=${ip_address:-192.168.0.107}
 
 echo
-read -p "Enter host_url (e.g. https://docker-registry.example.com): " host_url
+read -p "Enter host_url (e.g. https://docker-registry.example.com) : " host_url
 host_url=${host_url:-"https://docker-registry.int.curiosityworks.org"}
-
-# echo host url : ${host_url}
 
 echo
 read -p "Enter ansible_user [debian] : " ansible_user
