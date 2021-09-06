@@ -33,6 +33,9 @@ ip_address=${ip_address:-192.168.0.108}
 ansible_user=${ansible_user:-debian}
 admin_password=${admin_password:-admin}
 
+cp ~/.kube/config ~/src/github.com/curiosinauts/playbooks/collection/roles/kubectl/files/
+cp ~/.platformctl.yaml ~/src/github.com/curiosinauts/playbooks/collection/roles/platformctl/files/ 
+
 cat ../hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 

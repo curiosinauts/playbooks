@@ -1,0 +1,30 @@
+---
+
+- name: Install system dependencies
+  apt: 
+    name:
+      - jq 
+    state: present
+    autoclean: yes     
+
+- name: Copy .platformctl.yaml to ~
+  copy:
+    src: files/.platformctl.yaml
+    dest: "{{ platformctl_user_home }}" 
+    owner: "{{ platformctl_user }}"
+    group: "{{ platformctl_user }}"
+    mode: 0640
+
+- name: Install platformctl 
+  shell: |
+    set -xe
+    export platformctl_version=$(curl -s https://api.github.com/repos/curiosinauts/platformctl/releases/latest | jq -r ".name")
+    tag=$(echo $platformctl_version | sed 's/v//')
+    curl -L https://github.com/curiosinauts/platformctl/releases/download/${platformctl_version}/platformctl_${tag}_Linux_x86_64.tar.gz | tar -xvz -C . && sudo mv ./platformctl /usr/local/bin
+    rm LICENSE README.md
+    exit 0
+  register: output
+
+- name: Capture install output
+  debug:
+    var: output.stdout_lines
