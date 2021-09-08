@@ -25,6 +25,10 @@
     jenkins_package_state: present
     jenkins_admin_password: "{{ admin_password }}"
     docker_user: "jenkins"
+    kubectl_user: "jenkins"
+    kubectl_user_home: "/var/lib/jenkins"
+    platformctl_user: "jenkins"
+    platformctl_user_home: "/var/lib/jenkins"
 
   # pre_tasks:
   #   - include_tasks: ../java8.yml
@@ -33,6 +37,8 @@
     - role: geerlingguy.java
     - role: geerlingguy.jenkins
     - role: docker
+    - role: kubectl
+    - role: platformctl
 
   post_tasks:
     - name: Give Jenkins time to restart before applying the following fix. Do not stop early.

@@ -1,0 +1,33 @@
+---
+
+- name: Create ~/.kube
+  file:
+    path: "{{ kubectl_user_home }}/.kube" 
+    state: directory
+    owner: "{{ kubectl_user }}"
+    group: "{{ kubectl_user }}"
+    mode: 0755
+
+- name: Copy config to ~/.kube
+  copy:
+    src: files/config
+    dest: "{{ kubectl_user_home }}/.kube" 
+    owner: "{{ kubectl_user }}"
+    group: "{{ kubectl_user }}"
+    mode: 0640
+
+- name: Install kubectl 
+  shell: |
+    set -e
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" 
+    echo "$(cat kubectl.sha256)  kubectl" | tee | sha256sum --check
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    kubectl version --client    
+    rm kubectl kubectl.sha256
+    exit 0
+  register: output
+
+- name: Capture install output
+  debug:
+    var: output.stdout_lines
