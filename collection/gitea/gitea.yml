@@ -63,3 +63,10 @@
     - role: thomas_maurice.ansible_role_gitea
     - role: consul-registration
       when: setup_option == 'consul'
+  post_tasks:
+    - name: tools for backup
+      apt: 
+        name:
+          - unzip
+        state: present
+        autoclean: yes      
