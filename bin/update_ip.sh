@@ -40,8 +40,6 @@ update_resolve_conf() {
     CMDS=$(cat <<EOF
 
 sudo su -c "cat > /etc/resolv.conf <<EOF2
-domain curiosityworks.org 
-search curiosityworks.org 
 nameserver 192.168.0.110
 nameserver 1.1.1.1
 nameserver 8.8.8.8
