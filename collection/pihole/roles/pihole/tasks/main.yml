@@ -1,0 +1,14 @@
+---
+
+- name: Copy 01-pihole.conf
+  copy:
+    src: files/01-pihole.conf 
+    dest: /etc/dnsmasq.d/01-pihole.conf 
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Restart pihole
+  shell: |
+    set -e
+    systemctl restart pihole-FTL    

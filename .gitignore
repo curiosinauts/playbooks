@@ -9,3 +9,4 @@ notes.txt
 *.swp
 boxes
 test
+.DS_Store
