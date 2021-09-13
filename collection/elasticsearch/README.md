@@ -16,3 +16,9 @@ PLAY [consul cluster] *************************************************
 TASK [Gathering Facts ]************************************************
 ...
 ```
+
+# Edit /etc/elasticsearch/elasticsearch.yml
+add the following
+```
+xpack.security.enabled: false
+```
