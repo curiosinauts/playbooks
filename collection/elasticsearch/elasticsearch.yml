@@ -6,3 +6,5 @@
     - role: elastic.elasticsearch
   vars:
     es_version: 7.14.0
+    es_config:
+      http.host: 0.0.0.0
