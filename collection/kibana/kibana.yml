@@ -1,0 +1,14 @@
+---
+
+- name: Kibana install 
+  hosts: nodes
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true  
+  roles:
+    - geerlingguy.kibana
+  vars:
+    kibana_elasticsearch_url: "http://localhost:9200"  
+    kibana_server_port: 5601
+    kibana_server_host: "0.0.0.0"

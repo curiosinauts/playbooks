@@ -1,0 +1,8 @@
+---
+
+- name: Simple Example
+  hosts: nodes
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_version: 7.14.0
