@@ -1,0 +1,38 @@
+---
+
+- name: Fluentd
+  hosts: nodes
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true  
+  vars:
+    fluentd_version: 4
+    fluentd_package_state: latest
+    fluentd_service_name: td-agent
+    fluentd_service_state: started
+    fluentd_service_enabled: true
+    fluentd_conf_sources: |
+      <match nginx.**>
+        @type elasticsearch
+        host 192.168.0.117
+        port 9200
+        logstash_format false
+        # tag_key "@log_name"
+      </match>    
+      <source>
+        @type tail
+        @id input_tail
+        path /var/log/nginx/access.log
+        pos_file /var/log/td-agent/tmp/access.log.pos
+        <parse>
+          @type nginx
+          keep_time_key true
+          expression /^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)"(?:\s+(?<http_x_forwarded_for>[^ ]+))?)?$/
+          time_format %d/%b/%Y:%H:%M:%S %z
+        </parse>
+        tag nginx.access
+      </source>   
+  roles:
+    - fluentd
+    - geerlingguy.fluentd

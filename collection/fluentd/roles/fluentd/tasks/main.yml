@@ -1,0 +1,4 @@
+- name: Allow fluentd to read access log file 
+  ansible.builtin.file:
+    path: /var/log/nginx/access.log
+    mode: '0644'
