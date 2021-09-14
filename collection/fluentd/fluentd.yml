@@ -13,13 +13,16 @@
     fluentd_service_state: started
     fluentd_service_enabled: true
     fluentd_conf_sources: |
-      <match nginx.**>
+      <match nginx.access>
         @type elasticsearch
+        @id access_log
         host 192.168.0.117
         port 9200
-        logstash_format false
-        # tag_key "@log_name"
-      </match>    
+        logstash_format true
+        <buffer>
+          flush_mode immediate
+        </buffer>
+      </match>
       <source>
         @type tail
         @id input_tail
@@ -28,11 +31,9 @@
         <parse>
           @type nginx
           keep_time_key true
-          expression /^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)"(?:\s+(?<http_x_forwarded_for>[^ ]+))?)?$/
-          time_format %d/%b/%Y:%H:%M:%S %z
         </parse>
         tag nginx.access
-      </source>   
+      </source>
   roles:
     - fluentd
     - geerlingguy.fluentd
