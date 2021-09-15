@@ -12,3 +12,5 @@
     kibana_elasticsearch_url: "http://localhost:9200"  
     kibana_server_port: 5601
     kibana_server_host: "0.0.0.0"
+    kibana_elasticsearch_username: "kibana_system"
+    kibana_elasticsearch_password: "w4TcUd7PCpKRV7xZ3Ijh"

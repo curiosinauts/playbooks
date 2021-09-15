@@ -22,6 +22,8 @@
         <buffer>
           flush_mode immediate
         </buffer>
+        user logstash
+        password changeMe        
       </match>
       <source>
         @type tail
