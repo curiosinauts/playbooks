@@ -8,6 +8,14 @@
     owner: root
     group: root
 
+- name: Copy nginx logrotation conf file
+  copy:
+    src: files/nginx
+    dest: /etc/logrotate.d/nginx
+    mode: 0644
+    owner: root
+    group: root
+
 - name: Restart nginx
   shell: |
     set -e
