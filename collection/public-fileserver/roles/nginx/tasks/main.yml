@@ -1,0 +1,60 @@
+---
+# Nginx
+
+- name: Install Nginx Repo
+  shell: |
+    curl -L https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+    touch /etc/apt/sources.list.d/nginx.list
+    echo 'deb http://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list.d/nginx.list
+    echo 'deb-src http://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list.d/nginx.list 
+    sudo apt-get update    
+    apt install nginx
+
+- name: Copy authorized_keys
+  copy:
+    src: files/.ssh/authorized_keys
+    dest: /home/debian/.ssh/
+    owner: debian
+    group: debian
+    mode: 0644
+
+- name: Copy sites available 
+  copy:
+    src: files/sites-available
+    dest: /etc/nginx
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create fileserver.curiosityworks.org htdocs folder
+  file:
+    path: /var/www/fileserver.curiosityworks.org/htdocs
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Change the owner to debian
+  file: 
+    dest: /var/www
+    owner: debian 
+    group: debian 
+    mode: 0755
+    recurse: yes
+
+- name: Create sites enabled folder
+  file:
+    path: /etc/nginx/sites-enabled 
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create symlink to sites enabled
+  file:
+    src:  /etc/nginx/sites-available/fileserver.curiosityworks.org
+    dest: /etc/nginx/sites-enabled/fileserver.curiosityworks.org   
+    owner: root
+    group: root
+    state: link
+  notify: restart nginx
