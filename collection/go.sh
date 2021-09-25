@@ -27,7 +27,7 @@ read -p "Enter  go version      [1.16.7]   : " version
 
 ip_address=${ip_address:-192.168.0.108}
 ansible_user=${ansible_user:-debian}
-user=${user:-debigna}
+user=${user:-debian}
 version=${version:-1.16.7}
 
 cat ./hosts.tpl > hosts

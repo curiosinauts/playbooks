@@ -48,6 +48,14 @@
   become_user: root
   become_method: sudo       
 
+- name: Copy .zshrc to user home
+  template:
+    src: .zshrc.j2
+    dest: "{{ home }}/.zshrc"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0640  
+
 - name: Create HOME/src 
   file:
     path: "{{ home }}/src"
