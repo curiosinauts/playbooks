@@ -1,0 +1,16 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - curl
+      - git
+      - htop
+      - locales
+      - lsb-release
+      - man
+      - procps
+      - unzip
+    update_cache: yes      
+    state: present
+    autoclean: yes      
