@@ -11,6 +11,8 @@
       - man
       - procps
       - unzip
+      - python3
+      - python3-pip
     update_cache: yes      
     state: present
     autoclean: yes      

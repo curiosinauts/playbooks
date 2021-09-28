@@ -1,0 +1,69 @@
+---
+
+- name: Install codeserver
+  become: false   
+  shell: |
+    export CDR_VERSION={{cdr_version}} && \
+    curl -sfOL https://github.com/cdr/code-server/releases/download/v${CDR_VERSION}/code-server_${CDR_VERSION}_amd64.deb    && \
+    sudo dpkg -i code-server_${CDR_VERSION}_amd64.deb                                                                       && \
+    sudo systemctl enable code-server@$USER                                                                                 && \
+    sudo rm code-server_${CDR_VERSION}_amd64.deb 
+  register: output
+
+- name: Capture install output
+  debug:
+    var: output.stdout_lines
+
+- name: Install extensions
+  become: false   
+  shell: |
+    /usr/bin/code-server --install-extension jpotterm.simple-vim    && \
+    /usr/bin/code-server --install-extension ms-python.python       && \               
+    /usr/bin/code-server --install-extension golang.go              && \
+    /usr/bin/code-server --install-extension vsls-contrib.codetour  && \
+    /usr/bin/python3 -m pip install -U pylint --user 
+  register: output2
+
+- name: Capture install output
+  debug:
+    var: output2.stdout_lines
+
+- name: Copy settings.json
+  copy:
+    src: files/settings.json 
+    dest: /home/{{username}}/.local/share/code-server/User/settings.json
+    mode: 0644
+    owner: "{{username}}"
+    group: "{{username}}"
+
+- name: Copy git-ssh-config
+  copy:
+    src: files/git-ssh-config
+    dest: /home/{{username}}/.git-ssh-config
+    mode: 0644
+    owner: "{{username}}"
+    group: "{{username}}"
+
+- name: Copy .ssh
+  copy:
+    src: files/.ssh
+    dest: /home/{{username}}/.ssh
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0700
+
+- name: Copy .gitconfig
+  copy:
+    src: files/.gitconfig
+    dest: /home/{{username}}/.gitconfig
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0600
+
+- name: Copy config.yaml 
+  copy:
+    src: files/config.yaml 
+    dest: /home/{{username}}/.config/code-server/config.yaml 
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0644

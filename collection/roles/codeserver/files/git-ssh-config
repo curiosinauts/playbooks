@@ -1,0 +1,7 @@
+
+Host git-ssh.curiosityworks.org 
+  User git 
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
