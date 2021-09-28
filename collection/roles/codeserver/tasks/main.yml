@@ -67,3 +67,25 @@
     owner: "{{username}}"
     group: "{{username}}"
     mode: 0644
+
+- name: Copy startup script
+  copy:
+    src: files/codeserver.sh
+    dest: /usr/local/bin/codeserver.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy service script
+  copy:
+    src: files/codeserver.service
+    dest: /etc/systemd/system/codeserver.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start codeserver service
+  service:
+    name: codeserver
+    state: started
+    enabled: yes        

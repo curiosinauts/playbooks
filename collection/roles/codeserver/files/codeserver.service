@@ -1,0 +1,18 @@
+[Unit]
+Description="Code Server"
+Documentation=https://www.coder.com/
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=debian
+Group=debian
+ExecStart=/usr/local/bin/codeserver.sh
+ExecReload=/usr/local/bin/codeserver.sh reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
