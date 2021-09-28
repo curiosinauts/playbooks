@@ -1,0 +1,15 @@
+---
+
+# -------------------------------------------------------------------------------------
+# kubectl
+# -------------------------------------------------------------------------------------
+- name: kubectl
+  hosts: nodes 
+  become: true
+  become_user: root
+  become_method: sudo 
+  vars:
+    kubectl_user: "debian"
+    kubectl_user_home: "/home/debian"   
+  roles:
+    - role: kubectl
