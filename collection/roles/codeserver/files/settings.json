@@ -6,5 +6,8 @@
     "go.useLanguageServer": true,
     "extensions.autoUpdate": false,
     "git.autofetch": true,
-    "git.autofetchPeriod": 10800
+    "git.autofetchPeriod": 10800,
+    "gopls": {
+        "build.experimentalWorkspaceModule": true
+    }    
 }
