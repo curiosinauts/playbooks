@@ -6,7 +6,7 @@
   become_user: root
   become_method: sudo  
   vars: 
-    cdr_version: "3.10.0"
+    cdr_version: "3.12.0"
     username: "debian"
   roles:
     - role: codeserver 

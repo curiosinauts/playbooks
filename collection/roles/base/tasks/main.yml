@@ -13,6 +13,12 @@
       - unzip
       - python3
       - python3-pip
+      - tmux
     update_cache: yes      
     state: present
     autoclean: yes      
+
+- name: Install python dependency
+  shell: |
+    pip3 install ansible
+    exit 0
