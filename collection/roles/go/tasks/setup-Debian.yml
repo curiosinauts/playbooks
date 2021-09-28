@@ -55,36 +55,3 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: 0640  
-
-- name: Create HOME/src 
-  file:
-    path: "{{ home }}/src"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo       
-
-- name: Create HOME/bin 
-  file:
-    path: "{{ home }}/bin"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo       
-
-- name: Create HOME/pkg 
-  file:
-    path: "{{ home }}/pkg"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo       

@@ -42,24 +42,3 @@
     dest: "{{ home }}/"
     owner: "{{ user }}"
     mode: 0755
-
-- name: Create HOME/src 
-  file:
-    path: "{{ home }}/src"
-    state: directory
-    owner: "{{ user }}"
-    mode: 0755
-
-- name: Create HOME/bin 
-  file:
-    path: "{{ home }}/bin"
-    state: directory
-    owner: "{{ user }}"
-    mode: 0755
-
-- name: Create HOME/pkg 
-  file:
-    path: "{{ home }}/pkg"
-    state: directory
-    owner: "{{ user }}"
-    mode: 0755
