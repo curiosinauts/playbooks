@@ -37,17 +37,6 @@
     home: "/home/{{ user }}"
   when: user != "root" and user != "jenkins"
 
-- name: Copy .profile
-  copy:
-    src: files/.profile
-    dest: "{{ home }}"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo       
-
 - name: Copy .zshrc to user home
   template:
     src: .zshrc.j2

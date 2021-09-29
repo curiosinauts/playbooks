@@ -35,10 +35,3 @@
   set_fact:
     home: "/home/{{ user }}"
   when: user != "root"
-
-- name: Copy .profile
-  copy:
-    src: files/.profile
-    dest: "{{ home }}/"
-    owner: "{{ user }}"
-    mode: 0755
