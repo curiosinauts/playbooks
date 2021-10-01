@@ -4,11 +4,14 @@
 # Docker
 # -------------------------------------------------------------------------------------
 - name: docker
-  hosts: "{{ target }}"
+  hosts: nodes
   user: "{{ user }}"
   become: yes
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
+  vars:
+    docker_user: "{{ user }}"
+    setup_option: "{{ setup_option }}"
   roles:
     - role: docker
