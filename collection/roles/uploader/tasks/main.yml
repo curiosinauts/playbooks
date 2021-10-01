@@ -1,0 +1,65 @@
+---
+# Install uploader
+
+- name: Install Packages
+  apt: 
+    name:
+      - unzip
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Add uploader group
+  group:
+    name: uploader
+    state: present
+
+- name: Add uploader user
+  user:
+    name: uploader
+    group: uploader
+    system: yes
+    state: present
+    home: /etc/uploader.d
+    shell: /bin/false
+
+- name: Copy uploader startup script
+  copy:
+    src: files/uploader
+    dest: /etc/uploader.d/uploader
+    owner: uploader
+    group: uploader
+    mode: 0755
+
+- name: Copy uploader startup script
+  copy:
+    src: files/uploader.sh
+    dest: /usr/local/bin/uploader.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy uploader service script
+  copy:
+    src: files/uploader.service
+    dest: /etc/systemd/system/uploader.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add uploader to sudoers
+  copy:
+    src: files/uploader-user-privilege
+    dest: /etc/sudoers.d
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Enable uploader service
+  shell: |
+    set -e
+    systemctl enable uploader
+    systemctl start uploader
+    exit 0

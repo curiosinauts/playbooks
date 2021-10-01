@@ -3,9 +3,8 @@
 # set -x
 
 usage() {
-  echo -e "Usage   : deloy.sh [<setup_option>]"  
+  echo -e "Usage   : deloy.sh"  
   echo
-  echo -e "Enter jenkins hostname            : "
 }
 
 export ANSIBLE_STDOUT_CALLBACK=debug
