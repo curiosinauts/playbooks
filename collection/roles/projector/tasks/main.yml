@@ -1,0 +1,82 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - python3 
+      - python3-pip
+      - python3-cryptography
+      - less
+      - libxext6
+      - libxrender1
+      - libxtst6
+      - libfreetype6
+      - libxi6
+    update_cache: yes      
+    state: present
+    autoclean: yes      
+
+- name: Update pip
+  become: false 
+  shell: |
+    python3 -m pip install -U pip
+    exit 0
+
+- name: Install projector installer
+  become: false
+  pip: 
+    name: projector-installer
+    extra_args: --user
+
+- name: Install ide
+  become: false   
+  shell: |
+    export PATH="$HOME/.local/bin:$PATH"   && \
+    projector ide autoinstall                 \
+    --config-name ide                         \
+    --ide-name "GoLand 2021.2.3"              \
+    --port  9999                              \
+    --hostname "*"
+  register: output3
+
+- name: Capture install output
+  debug:
+    var: output3.stdout_lines    
+
+- name: Copy git-ssh-config
+  copy:
+    src: files/git-ssh-config
+    dest: /home/{{username}}/.git-ssh-config
+    mode: 0644
+    owner: "{{username}}"
+    group: "{{username}}"
+
+- name: Copy .ssh
+  copy:
+    src: files/.ssh
+    dest: /home/{{username}}/.ssh
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0700
+
+- name: Copy .gitconfig
+  copy:
+    src: files/.gitconfig
+    dest: /home/{{username}}/.gitconfig
+    owner: "{{username}}"
+    group: "{{username}}"
+    mode: 0600
+
+- name: Copy service script
+  copy:
+    src: files/projector.service
+    dest: /etc/systemd/system/projector.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start projector service
+  service:
+    name: projector
+    state: started
+    enabled: yes        
