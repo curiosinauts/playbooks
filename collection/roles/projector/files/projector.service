@@ -8,8 +8,8 @@ After=network-online.target
 [Service]
 User=debian
 Group=debian
-ExecStart=/home/debian/.projector/configs/ide/run.sh
-ExecReload=/home/debian/.projector/configs/ide/run.sh reload
+ExecStart=/home/debian/.projector/configs/GoLand/run.sh
+ExecReload=/home/debian/.projector/configs/GoLand/run.sh reload
 KillMode=control-group
 Restart=on-failure
 LimitNOFILE=65536

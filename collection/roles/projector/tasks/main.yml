@@ -28,15 +28,21 @@
     name: projector-installer
     extra_args: --user
 
+- name: Delete projector GoLand directory
+  file:
+    state: absent
+    path: /home/{{username}}/.projector/configs/GoLand
+
 - name: Install ide
   become: false   
   shell: |
-    export PATH="$HOME/.local/bin:$PATH"   && \
-    projector ide autoinstall                 \
-    --config-name ide                         \
-    --ide-name "GoLand 2021.2.3"              \
-    --port  9999                              \
-    --hostname "*"
+    export PATH="$HOME/.local/bin:$PATH"            &&  \
+    projector ide autoinstall                           \
+    --config-name GoLand                                \
+    --ide-name "GoLand 2021.2.3"                        \
+    --port  9999                                        \
+    --hostname "*"                                  &&  \
+    sudo sysctl fs.inotify.max_user_watches=524288
   register: output3
 
 - name: Capture install output
