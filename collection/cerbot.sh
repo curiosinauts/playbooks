@@ -32,7 +32,7 @@ email=${email:-7onetella@gmail.com}
 echo
 read -p "Enter cloudflare api_key                     : " api_key
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user} email=${email} api_key=${api_key}" certbot.yml    

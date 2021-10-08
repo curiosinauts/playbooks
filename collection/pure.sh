@@ -29,7 +29,7 @@ echo
 read -p "Enter username     [debian] : " username
 username=${username:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 ansible-playbook -i hosts -e "username=${username} ansible_user=${ansible_user}" pure.yml    

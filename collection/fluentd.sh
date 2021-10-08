@@ -26,7 +26,7 @@ read -p "Enter ansible_user     [debian]        : " ansible_user
 ip_address=${ip_address:-192.168.0.104}
 ansible_user=${ansible_user:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user}" fluentd.yml    
