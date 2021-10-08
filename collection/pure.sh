@@ -26,7 +26,7 @@ read -p "Enter ansible_user [debian] : " ansible_user
 ansible_user=${ansible_user:-debian}
 
 echo
-read -p "Enter username              : " username
+read -p "Enter username     [debian] : " username
 username=${username:-debian}
 
 cat ../hosts.tpl > hosts
