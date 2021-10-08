@@ -7,7 +7,7 @@
   become_method: sudo  
   any_errors_fatal: true
   vars: 
-    email: "{{email}}"
-    api_key: "{{api_key}}"
+    email: "{{ email }}"
+    api_key: "{{ api_key }}"
   roles:
     - certbot 
