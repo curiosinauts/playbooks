@@ -20,11 +20,11 @@ export ANSIBLE_ROLES_PATH=./roles:../roles:~/.ansible/roles
 
 
 echo
-read -p "Enter node ip address         : " ip_address
-read -p "Enter server domain           : " server_domain
-read -p "Enter git-ssh server domain   : " git_ssh_server_domain
-read -p "Enter ansible_user [debian]   : " ansible_user
-read -p "Enter secret key              : " secret_key
+read -p "Enter node ip address        [192.168.0.109]              : " ip_address
+read -p "Enter server domain          [git-web.curiosityworks.org] : " server_domain
+read -p "Enter git-ssh server domain  [git-ssh.curiosityworks.org] : " git_ssh_server_domain
+read -p "Enter ansible_user           [debian]                     : " ansible_user
+read -p "Enter secret key                                          : " secret_key
 
 ip_address=${ip_address:-192.168.0.109}
 server_domain=${server_domain:-git-web.curiosityworks.org}
@@ -39,7 +39,7 @@ if [ "${1}" == "consul" ]; then
   echo
 fi
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
 

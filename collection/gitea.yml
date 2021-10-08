@@ -61,7 +61,7 @@
     - role: consul-agent
       when: setup_option == 'consul'
     - role: thomas_maurice.ansible_role_gitea
-    - role: consul-registration
+    - role: gitea-consul
       when: setup_option == 'consul'
   post_tasks:
     - name: tools for backup
