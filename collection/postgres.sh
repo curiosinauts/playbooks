@@ -37,3 +37,5 @@ cat ./hosts.tpl > hosts
 echo ${ip_address} >> hosts 
 
 ansible-playbook -i hosts -e "db_name=${db_name} user_name=${user_name} user_password=${user_password} postgresql_version=${postgresql_version}" postgres.yml    
+
+rm -f hosts
