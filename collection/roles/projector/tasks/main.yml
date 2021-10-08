@@ -28,34 +28,25 @@
     name: projector-installer
     extra_args: --user
 
-- name: Delete projector GoLand directory
+- name: Delete projector ide directory
   file:
     state: absent
-    path: /home/{{username}}/.projector/configs/GoLand
+    path: /home/{{username}}/.projector/configs/{{ config_name }}
 
 - name: Install ide
   become: false   
   shell: |
     export PATH="$HOME/.local/bin:$PATH"            &&  \
     projector ide autoinstall                           \
-    --config-name GoLand                                \
-    --ide-name "GoLand 2021.2.3"                        \
-    --port  9999                                        \
-    --hostname "*"                                  &&  \
-    sudo sysctl fs.inotify.max_user_watches=524288
+    --config-name {{ config_name }}                     \
+    --ide-name "{{ ide }}"                              \
+    --port  {{ port }}                                  \
+    --hostname "*"                                  
   register: output3
 
 - name: Capture install output
   debug:
     var: output3.stdout_lines    
-
-- name: Copy git-ssh-config
-  copy:
-    src: files/git-ssh-config
-    dest: /home/{{username}}/.git-ssh-config
-    mode: 0644
-    owner: "{{username}}"
-    group: "{{username}}"
 
 - name: Copy .ssh
   copy:
@@ -65,24 +56,24 @@
     group: "{{username}}"
     mode: 0700
 
-- name: Copy .gitconfig
+- name: Copy sysctl.conf
   copy:
-    src: files/.gitconfig
-    dest: /home/{{username}}/.gitconfig
-    owner: "{{username}}"
-    group: "{{username}}"
-    mode: 0600
+    src: files/sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Copy service script
-  copy:
-    src: files/projector.service
-    dest: /etc/systemd/system/projector.service
+  template:
+    src: templates/projector.service.j2
+    dest: /etc/systemd/system/{{ config_name }}.service
     owner: root
     group: root
     mode: 0644
 
 - name: Enable and start projector service
   service:
-    name: projector
+    name: "{{ config_name }}"
     state: started
     enabled: yes        

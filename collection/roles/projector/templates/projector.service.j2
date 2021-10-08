@@ -1,5 +1,5 @@
 [Unit]
-Description="Projector Server"
+Description="{{ config_name }} Projector Server"
 Documentation=https://github.com/JetBrains/projector-installer#Quick-start
 Requires=network-online.target
 Wants=network-online.target
@@ -8,8 +8,8 @@ After=network-online.target
 [Service]
 User=debian
 Group=debian
-ExecStart=/home/debian/.projector/configs/GoLand/run.sh
-ExecReload=/home/debian/.projector/configs/GoLand/run.sh reload
+ExecStart=/home/debian/.projector/configs/{{ config_name }}/run.sh
+ExecReload=/home/debian/.projector/configs/{{ config_name }}/run.sh reload
 KillMode=control-group
 Restart=on-failure
 LimitNOFILE=65536

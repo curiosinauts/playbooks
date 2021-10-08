@@ -10,6 +10,8 @@
   become_method: sudo  
   vars: 
     ide: "{{ ide }}"
+    config_name: "{{ config_name }}"
+    port: "{{ port }}"
     username: "debian"
   roles:
     - role: projector
