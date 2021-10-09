@@ -25,7 +25,7 @@ echo
 read -p "Enter ansible_user     [debian]         : " ansible_user
 ansible_user=${ansible_user:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user}" internal-nginx-config.yml    
