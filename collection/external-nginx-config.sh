@@ -18,14 +18,14 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address       : " ip_address
+read -p "Enter node ip address  [192.168.0.104] : " ip_address
 ip_address=${ip_address:-192.168.0.104}
 
 echo
-read -p "Enter ansible_user [debian] : " ansible_user
+read -p "Enter ansible_user     [debian]        : " ansible_user
 ansible_user=${ansible_user:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user}" external-nginx-config.yml    
