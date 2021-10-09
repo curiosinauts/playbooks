@@ -19,14 +19,14 @@ export ANSIBLE_ROLES_PATH=./roles:../roles:~/.ansible/roles
 
 
 echo
-read -p "Enter node ip address         : " ip_address
+read -p "Enter node ip address  [192.168.0.112] : " ip_address
 echo
-read -p "Enter ansible_user [debian]   : " ansible_user
+read -p "Enter ansible_user     [debian]        : " ansible_user
 
 ip_address=${ip_address:-192.168.0.112}
 ansible_user=${ansible_user:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user}" pgadmin.yml    
