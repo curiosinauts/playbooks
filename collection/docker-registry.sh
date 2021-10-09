@@ -18,18 +18,19 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address                                     : " ip_address
-ip_address=${ip_address:-192.168.0.107}
+read -p "Enter node ip address       [192.168.0.107]               : " ip_address
 
 echo
 read -p "Enter host_url (e.g. https://docker-registry.example.com) : " host_url
-host_url=${host_url:-"https://docker-registry.int.curiosityworks.org"}
 
 echo
-read -p "Enter ansible_user [debian] : " ansible_user
+read -p "Enter ansible_user          [debian]                      : " ansible_user
+
+ip_address=${ip_address:-192.168.0.107}
+host_url=${host_url:-"https://docker-registry.int.curiosityworks.org"}
 ansible_user=${ansible_user:-debian}
 
-cat ../hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 if [ "${1}" == "consul" ]; then
