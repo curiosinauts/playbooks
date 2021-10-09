@@ -18,15 +18,17 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address : " ip_address
-ip_address=${ip_address:-192.168.0.244}
+read -p "Enter node ip address  [192.168.0.244] : " ip_address
 
 echo
-read -p "Enter ansible_user    : " ansible_user
+read -p "Enter ansible_user     [temp]          : " ansible_user
+
+ip_address=${ip_address:-192.168.0.244}
 ansible_user=${ansible_user:-temp}
 
-cat hosts.tpl > hosts
+cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
 ansible-playbook -i hosts -e "ansible_user=${ansible_user}" proxmox-base.yml    
 
+rm -rf hosts || true
