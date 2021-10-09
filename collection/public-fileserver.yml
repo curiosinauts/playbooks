@@ -11,4 +11,5 @@
   become_method: sudo  
   any_errors_fatal: true
   roles:
-    - role: nginx 
+    - role: publc-fileserver
+     
