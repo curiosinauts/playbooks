@@ -16,16 +16,19 @@ if [ "${1}" = "-h" ]; then
 fi
 
 echo
-read -p "Enter node ip address             : " ip_address
+read -p "Enter node ip address           : " ip_address
 echo
-read -p "Enter ansible user     [debian]   : " ansible_user
+read -p "Enter ansible user     [debian] : " ansible_user
+echo
+read -p "Enter username         [debian] : " username
 
 ip_address=${ip_address:-192.168.0.119}
 ansible_user=${ansible_user:-debian}
+username=${username:-debian}
 
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
-ansible-playbook -i hosts -e "ansible_user=${ansible_user} " codeserver.yml    
+ansible-playbook -i hosts -e "ansible_user=${ansible_user} username=${username}" codeserver.yml    
 
 rm -f hosts || true

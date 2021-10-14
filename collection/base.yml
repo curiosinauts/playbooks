@@ -6,6 +6,6 @@
   become_user: root
   become_method: sudo  
   vars: 
-    user: "{{ user }}"
+    user: "{{ username }}"
   roles:
     - role: base 

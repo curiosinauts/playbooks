@@ -7,6 +7,6 @@
   become_method: sudo  
   vars: 
     cdr_version: "3.12.0"
-    username: "debian"
+    username: "{{ username }}"
   roles:
     - role: codeserver 
