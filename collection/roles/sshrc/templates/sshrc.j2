@@ -1,0 +1,8 @@
+#!/bin/sh
+
+ip=`echo $SSH_CONNECTION | cut -d " " -f 1`
+
+logger -t ssh-wrapper $USER login from $ip
+
+curl -s -X POST -H 'Content-type: application/json' --data '{"text": "'$USER' login from '$ip'"}' \
+  {{ slash_hook_url }} /dev/null &

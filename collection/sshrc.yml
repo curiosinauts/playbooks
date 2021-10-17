@@ -1,0 +1,12 @@
+---
+
+- name: sshrc
+  hosts: nodes
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars:
+    slash_hook_url: "{{ slash_hook_url }}"
+  roles:
+    - role: sshrc

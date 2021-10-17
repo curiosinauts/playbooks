@@ -1,0 +1,19 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - curl
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Copy sshrc to /etc/ssh/
+  template:
+    src: sshrcj.j2
+    dest: /etc/ssh/sshrc
+    owner: root
+    group: root
+    mode: 0644
