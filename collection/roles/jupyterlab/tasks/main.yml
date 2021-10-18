@@ -5,6 +5,7 @@
   apt: 
     name:
       - uuid
+      - libffi-dev
     state: present
     autoclean: yes      
   become: yes
@@ -30,11 +31,11 @@
 
 - name: Copy password configuration file
   copy:
-    src: files/jupyter_notebook_config.json
-    dest: /home/vagrant/.jupyter/
+    src: files/jupyter_server_config.json
+    dest: "/home/{{ user }}/.jupyter/"
     owner: "{{ user }}"
     group: "{{ user }}"
-    mode: 0755
+    mode: 0600
 
 - name: Copy startup script
   template:
@@ -45,8 +46,8 @@
     mode: 0755
 
 - name: Copy service script
-  copy:
-    src: files/jupyterlab.service
+  template:
+    src: jupyterlab.service.j2
     dest: /etc/systemd/system/jupyterlab.service
     owner: root
     group: root
@@ -65,6 +66,7 @@
     owner: consul
     group: consul
     mode: 0755
+  when: setup_option == 'consul'  
 
 - name: Copy register.sh
   copy:
@@ -73,15 +75,11 @@
     owner: consul
     group: consul
     mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo
+  when: setup_option == 'consul'
 
 - name: Register Jupyter Lab with Consul
   shell: |
     set -e
     /etc/consul.d/register.sh
-    exit 0    
-  become: yes
-  become_user: root
-  become_method: sudo
+    exit 0
+  when: setup_option == 'consul'

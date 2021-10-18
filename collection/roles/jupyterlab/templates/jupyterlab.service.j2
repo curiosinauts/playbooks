@@ -5,8 +5,8 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-User=vagrant
-Group=vagrant
+User={{ user }}
+Group={{ user }}
 ExecStart=/usr/local/bin/jupyterlab.sh
 ExecReload=/usr/local/bin/jupyterlab.sh reload
 KillMode=control-group

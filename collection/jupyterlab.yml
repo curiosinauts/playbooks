@@ -4,8 +4,7 @@
 # Jupyter Lab
 # -------------------------------------------------------------------------------------
 - name: jupyterlab
-  hosts: "{{ target }}"
-  user: "{{ user }}"
+  hosts: nodes
   become: true
   become_user: root
   become_method: sudo  
@@ -14,9 +13,12 @@
     consul_nodes: 
       - "tmt-vm1.7onetella.net"
       - "tmt-vm2.7onetella.net"
-      - "tmt-vm3.7onetella.net"    
+      - "tmt-vm3.7onetella.net"
+    bind_addr: "{{ bind_addr }}"    
+    setup_option: "{{ setup_option }}"
   roles:
-    - consul-agent  
-    - jupyterlab
+    - role: consul-agent
+      when: setup_option == 'consul'  
+    - role: jupyterlab
 
 # password is password

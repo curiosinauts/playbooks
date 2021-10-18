@@ -1,7 +1,5 @@
 #!/bin/sh
 
-bind_addr=$(ip address | grep eth1 | grep inet | awk '{ print $2 }' | awk -F'/' '{ print $1 }')
+cd /home/{{ user }}
 
-cd /home/vagrant 
-
-/home/vagrant/.local/bin/jupyter-lab --ip ${bind_addr}
+/home/{{ user }}/.local/bin/jupyter-lab --ip {{ bind_addr }}
