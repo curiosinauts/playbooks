@@ -1,0 +1,45 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - libmaxminddb0 
+      - libmaxminddb-dev 
+      - mmdb-bin
+    state: present
+    autoclean: yes      
+  become: yes
+  become_user: root
+  become_method: sudo       
+
+- name: Install geoipupdate
+  shell: |
+    cd /tmp
+    curl -L -O https://github.com/maxmind/geoipupdate/releases/download/v4.8.0/geoipupdate_4.8.0_linux_amd64.deb
+    dpkg -i ./geoipupdate_4.8.0_linux_amd64.deb
+    rm ./geoipupdate_4.8.0_linux_amd64.deb
+    exit 0
+  register: output
+
+- name: Capture geoipupdate install output
+  debug:
+    var: output.stdout_lines
+
+- name: Copy GeoIP.conf to /etc/
+  template:
+    src: GeoIP.conf.j2
+    dest: /etc/GeoIP.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install geoipupdate
+  shell: |
+    geoipupdate
+    exit 0
+  register: output2
+
+- name: Capture geoipupdate output
+  debug:
+    var: output2.stdout_lines
+
