@@ -1,0 +1,13 @@
+---
+
+- name: geoipupdate
+  hosts: nodes 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - geoipupdate
+  vars: 
+    account_id: "{{ account_id }}"    
+    license_key: "{{ license_key }}"    
