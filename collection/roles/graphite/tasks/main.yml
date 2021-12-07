@@ -4,8 +4,8 @@
 - name: Install Graphite-Web and Carborn development header packages
   apt: 
     name:
-      - python
-      - python-pip
+      - python3
+      - python3-pip
       - python-dev 
       - libcairo2-dev 
       - libffi-dev 
@@ -43,7 +43,7 @@
   git:
     repo: 'https://github.com/graphite-project/graphite-web.git'
     dest: /usr/local/src/graphite-web
-    version: 1.1.5
+    version: 1.1.8
     depth: 1
   become: yes
   become_user: root
@@ -51,9 +51,9 @@
 
 - name: Install Graphite-Web 
   shell: |    
-    python ./setup.py install
+    python3 ./setup.py install
     mkdir -p /var/log/graphite /var/log/nginx /var/log/carbon 
-    pip install https://github.com/pygobject/pycairo/releases/download/v1.13.1/pycairo-1.13.1.tar.gz
+    pip3 install https://github.com/pygobject/pycairo/releases/download/v1.20.1/pycairo-1.20.1.tar.gz
     exit $?
   args:
     chdir: /usr/local/src/graphite-web
@@ -86,7 +86,7 @@
 
 - name: manage.py collectstatic 
   shell: |
-    python /opt/graphite/webapp/manage.py collectstatic --noinput
+    python3 /opt/graphite/webapp/manage.py collectstatic --noinput
     exit $?
   become: yes
   become_user: root
@@ -98,7 +98,7 @@
   git:
     repo: 'https://github.com/graphite-project/whisper.git'
     dest: /usr/local/src/whisper
-    version: 1.1.5
+    version: 1.1.8
     depth: 1
   become: yes
   become_user: root
@@ -106,7 +106,7 @@
 
 - name: Install Whisper
   shell: |
-    python ./setup.py install
+    python3 ./setup.py install
     exit $?
   args:
     chdir: /usr/local/src/whisper
@@ -118,7 +118,7 @@
   git:
     repo: 'https://github.com/graphite-project/carbon.git'
     dest: /usr/local/src/carbon
-    version: 1.1.5
+    version: 1.1.8
     depth: 1
   become: yes
   become_user: root
@@ -126,7 +126,7 @@
 
 - name: Install Carbon
   shell: |
-    python ./setup.py install
+    python3 ./setup.py install
     exit $?
   args:
     chdir: /usr/local/src/carbon
@@ -149,7 +149,7 @@
 
 - name: Create new database
   shell: |
-    python /opt/graphite/webapp/manage.py migrate
+    python3 /opt/graphite/webapp/manage.py migrate
     exit $?
   become: yes
   become_user: root
@@ -286,20 +286,20 @@
   become_user: root
   become_method: sudo    
 
-- name: Copy Graphite service definition
-  copy:
-    src: files/etc/consul.d/graphite.tpl
-    dest: /etc/consul.d/nutcracker.tpl
-    owner: consul
-    group: consul
-    mode: 0755
+# - name: Copy Graphite service definition
+#   copy:
+#     src: files/etc/consul.d/graphite.tpl
+#     dest: /etc/consul.d/nutcracker.tpl
+#     owner: consul
+#     group: consul
+#     mode: 0755
     
-- name: update Graphite bind address and restart consul to register Graphite as a service
-  shell: |
-    set -e
-    cd /etc/consul.d/
-    bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
-    cat graphite.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > graphite.json
-    chown consul:consul graphite.json
-    /usr/local/bin/consul reload
-    exit 0
+# - name: update Graphite bind address and restart consul to register Graphite as a service
+#   shell: |
+#     set -e
+#     cd /etc/consul.d/
+#     bind_addr=$(ifconfig | grep eth1 -A 1 | grep inet | awk '{ print $2 }')
+#     cat graphite.tpl | sed 's/__ip__/'"${bind_addr}"'/g' > graphite.json
+#     chown consul:consul graphite.json
+#     /usr/local/bin/consul reload
+#     exit 0
