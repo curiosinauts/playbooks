@@ -23,6 +23,7 @@
     10. PyCharm Community Edition 2020.3.3
 
 # GoLand
+    0. GoLand 2021.3
     1. GoLand 2021.2.3
     2. GoLand 2021.2.2
     3. GoLand 2021.2.1

@@ -20,14 +20,14 @@ read -p "Enter node ip address [192.168.0.119]    : " ip_address
 echo
 read -p "Enter ansible user    [debian]           : " ansible_user
 echo
-read -p "Enter ide to install  [GoLand 2021.2.3]  : " ide
+read -p "Enter ide to install  [GoLand 2021.3]    : " ide
 echo
 read -p "Enter port            [9999]             : " port
 
 
 ip_address=${ip_address:-192.168.0.119}
 ansible_user=${ansible_user:-debian}
-ide=${ide:-"GoLand 2021.2.3"}
+ide=${ide:-"GoLand 2021.3"}
 config_name=$(echo ${ide} awk '{ print $1 }')
 port=${port:-9999}
 
