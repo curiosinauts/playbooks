@@ -26,8 +26,8 @@ read -p "Enter ansible_user     [debian]              : " ansible_user
 ansible_user=${ansible_user:-debian}
 
 echo
-read -p "Enter email            [7onetella@gmail.com] : " email
-email=${email:-7onetella@gmail.com}
+read -p "Enter email            [admin@curiosityworks.org] : " email
+email=${email:-admin@curiosityworks.org}
 
 echo
 read -p "Enter cloudflare api_key                     : " api_key
