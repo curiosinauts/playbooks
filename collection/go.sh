@@ -22,12 +22,12 @@ read -p "Enter ansible user     [debian]   : " ansible_user
 echo
 read -p "Enter  user            [debian]   : " username
 echo
-read -p "Enter  go version      [1.16.7]   : " version
+read -p "Enter  go version      [1.17.6]   : " version
 
 ip_address=${ip_address:-192.168.0.108}
 ansible_user=${ansible_user:-debian}
 username=${username:-debian}
-version=${version:-1.16.7}
+version=${version:-1.17.6}
 
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
