@@ -5,7 +5,10 @@
 # external install: ansible-galaxy install geerlingguy.postgresql
 # -------------------------------------------------------------------------------------
 - name: postgres
-  hosts: databases 
+  hosts: nodes 
+  become: yes
+  become_user: root
+  become_method: sudo  
   roles:
     - role: geerlingguy.postgresql
       become: yes

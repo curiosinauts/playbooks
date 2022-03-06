@@ -18,19 +18,26 @@ if [ "${1}" = "-h" ]; then
 fi
 
 echo
-read -p "Enter vm instance ip address      : " ip_address
+read -p "Enter vm instance ip address  [192.168.0.104]     : " ip_address
 echo
-read -p "Enter db name                     : " db_name
+read -p "Enter db name                 [curiosityworks]    : " db_name
 echo
-read -p "Enter db user name                : " user_name
+read -p "Enter db user name            [k3s]               : " user_name
 echo
-read -p "Enter db user password            : " user_password
+read -p "Enter db user password                            : " user_password
 echo
-read -p "Enter ansible_user       [debian] : " ansible_user
+read -p "Enter ansible_user            [debian]            : " ansible_user
 echo
-read -p "Enter postgresql version [11]     : " postgresql_version
+read -p "Enter postgresql version      [11]                : " postgresql_version
 
-ansible_user=${ansible_user:-vagrant}
+ip_address=${ip_address:-192.168.0.104}
+
+db_name=${db_name:-curiosityworks}
+
+user_name=${user_name:-k3s}
+
+ansible_user=${ansible_user:-debian}
+
 postgresql_version=${postgresql_version:-11} 
 
 cat ./hosts.tpl > hosts
