@@ -7,6 +7,12 @@ apt upgrade
 apt install sudo
 
 # gets password promt
-usermod -aG sudo temp
+usermod -aG sudo debian 
 
-temp  ALL=(ALL) NOPASSWD:ALL
+debian  ALL=(ALL) NOPASSWD:ALL
+
+%sudo  ALL=(ALL) NOPASSWD: ALL
+
+# extra ansible recipes to apply
+- pure
+- node_exporter
