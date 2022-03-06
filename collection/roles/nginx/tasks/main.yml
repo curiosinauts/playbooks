@@ -78,3 +78,16 @@
 - name: Capture nginx module compilation output
   debug:
     var: output.stdout_lines
+
+- name: Copy nginx service script
+  copy:
+    src: files/nginx.service
+    dest: /lib/systemd/system/nginx.service
+    owner: root
+    group: root
+    mode: 0644    
+
+- name: Enable nginx service
+  service:
+    name: nginx
+    enabled: yes     
