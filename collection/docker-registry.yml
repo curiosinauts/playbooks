@@ -10,14 +10,7 @@
   become_method: sudo  
   any_errors_fatal: true
   vars:
-    host_url: "{{host_url}}" 
-    setup_option: "{{setup_option}}"
-    consul_version: "1.9.0"
-    consul_nodes: 
-      - "{{consul_node1}}"
-      - "{{consul_node2}}"
-      - "{{consul_node3}}"    
+    host_url: "{{ host_url }}" 
+    version: "{{ version }}"
   roles:
-    - role: consul-agent
-      when: setup_option == 'consul'
     - role: docker-registry

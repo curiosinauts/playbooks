@@ -23,13 +23,14 @@
     group: root
     mode: 0640
 
-- name: Download registry binary
-  get_url:
-    url: "https://raw.githubusercontent.com/docker/distribution-library-image/master/amd64/registry"
-    dest: /usr/local/bin/registry
+- name: Download docker registry binary
+  unarchive:
+    src: https://github.com/distribution/distribution/releases/download/v{{ version }}/registry_{{ version }}_linux_amd64.tar.gz
+    dest: /usr/local/bin/
     owner: root
     group: root
-    mode: 0755  
+    mode: 0755    
+    remote_src: yes
 
 - name: Copy startup script
   copy:
@@ -55,14 +56,15 @@
     group: root
     mode: 0644
 
-- include_tasks: registry_definition.yml
-  when: setup_option == 'consul'
-
 - name: Enable registry service
   service:
     name: registry
     enabled: yes    
 
+- name: Make sure a service unit is running
+  ansible.builtin.systemd:
+    state: started
+    name: registry
 
 
 

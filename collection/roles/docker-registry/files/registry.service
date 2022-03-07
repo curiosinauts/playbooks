@@ -1,6 +1,6 @@
 [Unit]
 Description="Registry - Docker"
-Documentation=https://github.com/7onetella/box
+Documentation=https://github.com/curiosinauts/playbooks
 Requires=network-online.target
 After=network-online.target
 ConditionFileNotEmpty=/etc/docker/registry/config.yml
