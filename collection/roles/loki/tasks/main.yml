@@ -1,0 +1,64 @@
+---
+
+- name: Download loki binary
+  unarchive:
+    src: https://github.com/grafana/loki/releases/download/v2.4.2/loki-linux-amd64.zip
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755    
+    remote_src: yes
+
+- name: Add loki group
+  group:
+    name: loki
+    state: present
+
+- name: Add loki user
+  user:
+    name: loki
+    group: loki
+    system: yes
+    state: present
+    home: /etc/loki.d
+    shell: /bin/false
+
+- name: Create /etc/loki.d folder
+  file:
+    path: /etc/loki.d
+    state: directory
+    owner: loki
+    group: loki
+    mode: 0755
+
+- name: Copy loki config file
+  copy:
+    src: files/loki.yml
+    dest: /etc/loki.d/loki.yml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy loki startup script
+  copy:
+    src: files/loki.sh
+    dest: /usr/local/bin/loki.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart loki    
+
+- name: Copy loki service script
+  copy:
+    src: files/loki.service
+    dest: /etc/systemd/system/loki.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart loki
+
+- name: Enable and start loki service
+  service:
+    name: loki
+    state: started
+    enabled: yes    

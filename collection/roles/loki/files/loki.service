@@ -1,0 +1,19 @@
+[Unit]
+Description="Grafana Loki"
+Documentation=https://grafana.com/docs/loki/latest
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/loki.d/loki.yml
+
+[Service]
+User=loki
+Group=loki
+ExecStart=/usr/local/bin/loki.sh
+ExecReload=/usr/local/bin/loki reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
