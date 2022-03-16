@@ -9,15 +9,5 @@
   become_user: root
   become_method: sudo  
   any_errors_fatal: true
-  vars: 
-    consul_version: "1.9.0"
-    consul_nodes: 
-      - "tmt-vm1.7onetella.net"
-      - "tmt-vm2.7onetella.net"
-      - "tmt-vm3.7onetella.net"    
   roles:
-    - role: consul-agent
-      when: setup_option == 'consul'
     - role: grafana
-  tags:
-    - grafana

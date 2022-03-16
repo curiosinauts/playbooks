@@ -1,16 +1,8 @@
 ---
-# Install Grafana Server
-
-- name: Install Packages
-  apt: 
-    name:
-      - uuid
-    state: present
-    autoclean: yes      
 
 - name: Install Grafana deb package 
   apt:
-    deb: https://dl.grafana.com/oss/release/grafana_8.3.1_amd64.deb     
+    deb: https://dl.grafana.com/oss/release/grafana_8.4.3_amd64.deb     
 
 - name: Copy grafana.ini
   copy:
@@ -29,42 +21,8 @@
     group: root
     mode: 0644
 
-# - name: Copy ldap.toml
-#   copy:
-#     src: files/ldap.toml
-#     dest: "/etc/grafana"
-#     owner: "grafana"
-#     group: "grafana"
-#     mode: 0640    
-#   notify: restart grafana
-
 - name: Enable and start grafana service
   service:
     name: grafana-server
     state: started
     enabled: yes      
-
-- name: Copy Grafana service definition
-  copy:
-    src: files/grafana.tpl
-    dest: /etc/consul.d/grafana.tpl
-    owner: consul
-    group: consul
-    mode: 0755
-  when: setup_option == 'consul'
-
-- name: Copy Grafana service definition
-  copy:
-    src: files/register.sh
-    dest: /etc/consul.d/register.sh
-    owner: consul
-    group: consul
-    mode: 0755
-  when: setup_option == 'consul'
-
-- name: Register Grafana with Consul
-  shell: |
-    set -e
-    /etc/consul.d/register.sh
-    exit 0    
-  when: setup_option == 'consul'
