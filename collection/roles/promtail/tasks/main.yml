@@ -1,0 +1,64 @@
+---
+
+- name: Download promtail binary
+  unarchive:
+    src: https://github.com/grafana/loki/releases/download/v2.4.2/promtail-linux-amd64.zip
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755    
+    remote_src: yes
+
+- name: Add promtail group
+  group:
+    name: promtail
+    state: present
+
+- name: Add promtail user
+  user:
+    name: promtail
+    group: promtail
+    system: yes
+    state: present
+    home: /etc/promtail.d
+    shell: /bin/false
+
+- name: Create /etc/promtail.d folder
+  file:
+    path: /etc/promtail.d
+    state: directory
+    owner: promtail
+    group: promtail
+    mode: 0755
+
+- name: Copy promtail config file
+  template:
+    src: promtail.yml.j2
+    dest: /etc/promtail.d/promtail.yml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy loki startup script
+  copy:
+    src: files/promtail.sh
+    dest: /usr/local/bin/promtail.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart promtail    
+
+- name: Copy promtail service script
+  copy:
+    src: files/promtail.service
+    dest: /etc/systemd/system/promtail.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart promtail
+
+- name: Enable and start promtail service
+  service:
+    name: promtail
+    state: started
+    enabled: yes    

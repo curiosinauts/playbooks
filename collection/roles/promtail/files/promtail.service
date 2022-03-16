@@ -1,0 +1,19 @@
+[Unit]
+Description="Grafana Promtail"
+Documentation=https://grafana.com/docs/loki/latest
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/promtail.d/promtail.yml
+
+[Service]
+User=promtail
+Group=promtail
+ExecStart=/usr/local/bin/promtail.sh
+ExecReload=/usr/local/bin/promtail reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
