@@ -11,9 +11,6 @@
       - uuid
     state: present
     autoclean: yes      
-  become: yes
-  become_user: root
-  become_method: sudo       
 
 - name: Add Prometheus group
   group:
@@ -45,11 +42,6 @@
     group: root
     mode: 0755
     remote_src: yes
-  become: yes
-  become_user: root
-  become_method: sudo       
-  when: 
-    - skip_download is not defined     
 
 - name: Copy unarchived prometheus to /opt/prometheus
   shell: |
@@ -99,34 +91,3 @@
     name: prometheus
     state: started
     enabled: yes  
-
-- name: Copy Prometheus service definition
-  copy:
-    src: files/prometheus.tpl
-    dest: /etc/consul.d/prometheus.tpl
-    owner: consul
-    group: consul
-    mode: 0755
-  when: setup_option == 'consul'
-    
-- name: Copy register.sh
-  copy:
-    src: files/register.sh
-    dest: /etc/consul.d/register.sh
-    owner: consul
-    group: consul
-    mode: 0755
-  become: yes
-  become_user: root
-  become_method: sudo
-  when: setup_option == 'consul'  
-
-- name: Register with Consul
-  shell: |
-    set -e
-    /etc/consul.d/register.sh
-    exit 0    
-  become: yes
-  become_user: root
-  become_method: sudo
-  when: setup_option == 'consul'
