@@ -1,0 +1,93 @@
+---
+# compile nginx and geoip2 module
+
+- name: Install Packages
+  apt: 
+    name:
+      - git 
+      - gcc
+      - libpcre3-dev
+      - zlib1g-dev
+      - make
+      - libssl-dev
+      - libxslt-dev
+      - libgd-dev
+      - libgeoip-dev
+    state: present
+    autoclean: yes      
+
+- name: Compile nginx module
+  shell: |
+    mkdir -p /tmp/nginx-build
+    cd /tmp/nginx-build
+    git clone https://github.com/leev/ngx_http_geoip2_module.git
+    curl -L -O http://nginx.org/download/nginx-1.14.2.tar.gz
+    tar zxvf nginx-1.14.2.tar.gz 
+    cd nginx-1.14.2
+    ./configure --with-compat --add-dynamic-module=../ngx_http_geoip2_module \
+    --with-cc-opt='-g -O2 -fdebug-prefix-map=/tmp/nginx-build/nginx-1.14.2=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' \
+    --with-ld-opt='-Wl,-z,relro -Wl,-z,now -fPIC' \
+    --prefix=/usr/share/nginx \
+    --modules-path=/usr/lib/nginx/modules \
+    --conf-path=/etc/nginx/nginx.conf \
+    --http-log-path=/var/log/nginx/access.log \
+    --error-log-path=/var/log/nginx/error.log \
+    --lock-path=/var/lock/nginx.lock \
+    --pid-path=/run/nginx.pid \
+    --http-client-body-temp-path=/var/lib/nginx/body \
+    --http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+    --http-proxy-temp-path=/var/lib/nginx/proxy \
+    --http-scgi-temp-path=/var/lib/nginx/scgi \
+    --http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+    --with-debug \
+    --with-pcre-jit \
+    --with-http_ssl_module \
+    --with-http_stub_status_module \
+    --with-http_realip_module \
+    --with-http_auth_request_module \
+    --with-http_v2_module \
+    --with-http_dav_module \
+    --with-http_slice_module \
+    --with-http_addition_module \
+    --with-http_sub_module \
+    --with-http_gunzip_module \
+    --with-http_gzip_static_module \
+    --with-threads \
+    --with-mail_ssl_module \
+    --with-stream_ssl_module \
+    --with-stream_ssl_preread_module \
+    --with-stream=dynamic \
+    --with-mail=dynamic \
+    --with-http_image_filter_module=dynamic \
+    --with-http_xslt_module=dynamic \
+    --with-http_geoip_module=dynamic 
+    # --add-dynamic-module=/build/nginx-m1Thpq/nginx-1.14.2/debian/modules/http-auth-pam \ 
+    # --add-dynamic-module=/build/nginx-m1Thpq/nginx-1.14.2/debian/modules/http-dav-ext \
+    # --add-dynamic-module=/build/nginx-m1Thpq/nginx-1.14.2/debian/modules/http-echo \
+    # --add-dynamic-module=/build/nginx-m1Thpq/nginx-1.14.2/debian/modules/http-upstream-fair \
+    # --add-dynamic-module=/build/nginx-m1Thpq/nginx-1.14.2/debian/modules/http-subs-filter
+    make modules
+    make install
+    cp objs/ngx_http_geoip2_module.so /usr/share/nginx/modules/
+    cp /usr/share/nginx/sbin/nginx /usr/sbin/
+    cd /usr/share/nginx
+    ln -s /usr/lib/nginx/modules/ modules
+    exit 0
+  register: output
+
+- name: Capture nginx module compilation output
+  debug:
+    var: output.stdout_lines
+
+- name: Copy nginx service script
+  copy:
+    src: files/nginx.service
+    dest: /lib/systemd/system/nginx.service
+    owner: root
+    group: root
+    mode: 0644    
+
+- name: Enable nginx service
+  service:
+    name: nginx
+    enabled: yes     
