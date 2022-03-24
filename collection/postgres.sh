@@ -2,20 +2,8 @@
 
 # set -x
 
-usage() {
-  echo -e "Usage   : deloy.sh"  
-  echo
-  echo -e 'Example : deloy.sh"'
-  echo
-}
-
 export ANSIBLE_STDOUT_CALLBACK=debug
 export ANSIBLE_ROLES_PATH=./roles:../roles:~/.ansible/roles
-
-if [ "${1}" = "-h" ]; then
-    usage
-    exit 0
-fi
 
 echo
 read -p "Enter vm instance ip address  [192.168.0.104]     : " ip_address
