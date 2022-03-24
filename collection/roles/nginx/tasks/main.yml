@@ -1,19 +1,28 @@
 ---
 
+- name: Install Packages
+  apt: 
+    name:
+      - gnupg
+    state: present
+    autoclean: yes  
+
 - name: Update nginx to the latest 
-  shell: |
-    cat <<EOF >> /etc/apt/sources.list.d/nginx.list
-    deb http://nginx.org/packages/ubuntu/ codename nginx
-    deb-src http://nginx.org/packages/ubuntu/ codename nginx
-    EOF    
-    curl -L https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
-    apt update
-    apt install nginx
-    apt upgrade
-    exit 0
+  shell: 
+    cmd: |
+      cat << EOF > /etc/apt/sources.list.d/nginx.list
+      deb http://nginx.org/packages/ubuntu/ codename nginx
+      deb-src http://nginx.org/packages/ubuntu/ codename nginx
+      EOF
+
+      curl -L https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+      apt update
+      apt install -y nginx
+      apt upgrade
+      exit 0
   register: output
 
-- name: Capture nginx module compilation output
+- name: Capture nginx install output
   debug:
     var: output.stdout_lines
 
