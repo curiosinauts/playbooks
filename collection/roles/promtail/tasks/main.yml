@@ -2,7 +2,7 @@
 
 - name: Download promtail binary
   unarchive:
-    src: https://github.com/grafana/loki/releases/download/v2.4.2/promtail-linux-amd64.zip
+    src: https://github.com/grafana/loki/releases/download/v{{ version }}/promtail-linux-amd64.zip
     dest: /usr/local/bin/
     owner: root
     group: root
