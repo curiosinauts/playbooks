@@ -23,3 +23,11 @@ apt-get install make
 make modules
 
 
+added the following to /etc/network/interfaces
+```
+iface ens19 inet static
+    address 192.168.0.120/32
+    netmask 255.255.255.0
+```
+
+

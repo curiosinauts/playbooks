@@ -10,15 +10,15 @@
 - name: Update nginx to the latest 
   shell: 
     cmd: |
-      cat << EOF > /etc/apt/sources.list.d/nginx.list
-      deb http://nginx.org/packages/ubuntu/ codename nginx
-      deb-src http://nginx.org/packages/ubuntu/ codename nginx
+      cat <<EOF > /etc/apt/sources.list.d/nginx.list
+      deb http://nginx.org/packages/debian/ buster nginx
+      deb-src http://nginx.org/packages/debian/ buster nginx
       EOF
 
       curl -L https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
       apt update
       apt install -y nginx
-      apt upgrade
+      apt upgrade -y
       exit 0
   register: output
 
