@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-. ./common.sh 192.168.0.130 prometheus
+. ./common.sh 192.168.69.130 prometheus

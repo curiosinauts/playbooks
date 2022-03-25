@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-. ./common.sh 192.168.0.130 grafana
+. ./common.sh 192.168.69.130 grafana

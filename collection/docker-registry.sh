@@ -6,7 +6,7 @@ export ANSIBLE_STDOUT_CALLBACK=debug
 export ANSIBLE_ROLES_PATH=./roles:../roles
 
 echo
-read -p "Enter node ip address       [192.168.0.121]                 : " ip_address
+read -p "Enter node ip address       [192.168.69.121]                 : " ip_address
 
 echo
 read -p "Enter host_url [https://docker-registry.curiosityworks.org] : " host_url
@@ -17,7 +17,7 @@ read -p "Enter ansible_user          [debian]                        : " ansible
 echo
 read -p "Enter version               [2.8.0]                         : " version
 
-ip_address=${ip_address:-192.168.0.121}
+ip_address=${ip_address:-192.168.69.121}
 host_url=${host_url:-https://docker-registry.curiosityworks.org}
 ansible_user=${ansible_user:-debian}
 version=${version:-2.8.0}

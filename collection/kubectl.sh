@@ -19,7 +19,7 @@ read -p "Enter node ip address             : " ip_address
 echo
 read -p "Enter ansible user     [debian]   : " ansible_user
 
-ip_address=${ip_address:-192.168.0.119}
+ip_address=${ip_address:-192.168.69.119}
 ansible_user=${ansible_user:-debian}
 
 cat ./hosts.tpl > hosts

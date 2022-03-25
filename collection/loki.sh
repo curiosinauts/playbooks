@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
-. ./common.sh 192.168.0.130 loki
+. ./common.sh 192.168.69.130 loki
 

@@ -24,7 +24,7 @@ read -p "Enter  user            [debian]   : " username
 echo
 read -p "Enter  go version      [1.17.6]   : " version
 
-ip_address=${ip_address:-192.168.0.108}
+ip_address=${ip_address:-192.168.69.108}
 ansible_user=${ansible_user:-debian}
 username=${username:-debian}
 version=${version:-1.17.6}

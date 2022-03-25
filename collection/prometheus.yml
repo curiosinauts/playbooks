@@ -12,6 +12,6 @@
     version: "2.14.0"
     targets:
       - "localhost:9090"
-      - "192.168.0.101:9100"
+      - "192.168.69.101:9100"
   roles:
     - role: prometheus
