@@ -16,4 +16,12 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: [ {% for target in targets %}{% if loop.index0 > 0 %}, {% endif %}"{{ target }}"{% endfor %} ]
+      - targets: [ "localhost:9090" ]
+    
+  - job_name: 'nodes'
+
+    # Override the global default and scrape targets from this job every 15 seconds.
+    scrape_interval: 15s
+
+    static_configs:
+      - targets: [ {% for target in targets %}{% if loop.index0 > 0 %}, {% endif %}"{{ target }}"{% endfor %} ]    
