@@ -1,0 +1,48 @@
+---
+
+- name: Add nginx-prometheus-exporter group
+  group:
+    name: nginxprometheusexporter
+    state: present
+
+- name: Add nginx-prometheus-exporter user
+  user:
+    name: nginxprometheusexporter
+    group: nginxprometheusexporter
+    system: yes
+    state: present
+    home: /etc/nginx-prometheus-exporter.d
+    shell: /bin/false
+
+- name: Download nginx-prometheus-exporter
+  unarchive:
+    src: "https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v0.10.0/nginx-prometheus-exporter_0.10.0_linux_amd64.tar.gz"
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+
+- name: Copy nginx-prometheus-exporter startup script
+  copy:
+    src: files/nginx-prometheus-exporter.sh
+    dest: /usr/local/bin/nginx-prometheus-exporter.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart nginx-prometheus-exporter    
+
+- name: Copy nginx-prometheus-exporter service script
+  copy:
+    src: files/nginx-prometheus-exporter.service
+    dest: /etc/systemd/system/nginx-prometheus-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx-prometheus-exporter
+
+- name: Enable and start nginx-prometheus-exporter service
+  service:
+    name: nginx-prometheus-exporter
+    state: started
+    enabled: yes  

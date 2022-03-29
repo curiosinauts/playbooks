@@ -1,0 +1,6 @@
+---
+
+- name: restart nginx-prometheus-exporter
+  service:
+    name: nginx-prometheus-exporter
+    state: restarted

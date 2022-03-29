@@ -1,0 +1,9 @@
+---
+
+- name: nginx-prometheus-exporter
+  hosts: nodes
+  become: true
+  become_user: root
+  become_method: sudo  
+  roles:
+    - role: nginx-prometheus-exporter
