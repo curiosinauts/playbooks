@@ -15,4 +15,4 @@ scrape_configs:
       - localhost
     labels:
       job: {{job_label}}
-      __path__: {{log_path}}/*log
+      __path__: {{log_path_expression}}

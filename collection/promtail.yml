@@ -10,6 +10,6 @@
     loki_host: "{{ loki_host }}"
     version: "2.4.2"
     job_label: "{{ job_label }}"
-    log_path: "{{ log_path }}"
+    log_path_expression: "{{ log_path_expression }}"
   roles:
     - promtail
