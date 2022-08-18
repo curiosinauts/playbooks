@@ -22,7 +22,7 @@ read -p "Enter ansible user     [debian]   : " ansible_user
 echo
 read -p "Enter user             [debian]   : " user
 
-ip_address=${ip_address:-192.168.69.121}
+ip_address=${ip_address:-192.168.4.121}
 ansible_user=${ansible_user:-debian}
 user=${user:-debian}
 setup_option=$1

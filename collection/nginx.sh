@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-. ./common.sh 192.168.69.100 nginx
+. ./common.sh 192.168.4.100 nginx

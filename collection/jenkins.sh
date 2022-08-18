@@ -29,7 +29,7 @@ read -p "Enter ansible user     [debian]   : " ansible_user
 echo
 read -p "Enter admin password   [admin]    : " admin_password
 
-ip_address=${ip_address:-192.168.69.108}
+ip_address=${ip_address:-192.168.4.108}
 ansible_user=${ansible_user:-debian}
 admin_password=${admin_password:-admin}
 

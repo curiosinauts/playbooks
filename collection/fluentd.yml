@@ -16,7 +16,7 @@
       <match nginx.access>
         @type elasticsearch
         @id access_log
-        host 192.168.69.117
+        host 192.168.4.117
         port 9200
         logstash_format true
         <buffer>

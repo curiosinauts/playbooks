@@ -12,9 +12,9 @@ events {
 
 stream {
   upstream k3s_servers {
-    server 192.168.69.101:6443;
-    server 192.168.69.102:6443;
-    server 192.168.69.103:6443;
+    server 192.168.4.101:6443;
+    server 192.168.4.102:6443;
+    server 192.168.4.103:6443;
   }
 
   server {
@@ -41,11 +41,11 @@ http {
   }
 
   map $ssl_server_name $targetBackend {
-    www.curiosityworks.org              http://192.168.69.101:80; 
-    robot.curiosityworks.org            http://192.168.69.101:80; 
-    console.curiosityworks.org          http://192.168.69.101:80;
-    docker-hub.curiosityworks.org       http://192.168.69.101:80; 
-    ~^vscode-.*                         http://192.168.69.101:80;
+    www.curiosityworks.org              http://192.168.4.101:80; 
+    robot.curiosityworks.org            http://192.168.4.101:80; 
+    console.curiosityworks.org          http://192.168.4.101:80;
+    docker-hub.curiosityworks.org       http://192.168.4.101:80; 
+    ~^vscode-.*                         http://192.168.4.101:80;
   }
   
   geoip2 /usr/share/GeoIP/GeoLite2-Country.mmdb {

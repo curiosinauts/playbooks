@@ -5,7 +5,7 @@
 usage() {
   echo -e "Usage   : deloy.sh <hosts>"  
   echo
-  echo -e 'Example : deloy.sh 192.168.69.244'
+  echo -e 'Example : deloy.sh 192.168.4.244'
   echo
 }
 
@@ -18,12 +18,12 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address  [192.168.69.244] : " ip_address
+read -p "Enter node ip address  [192.168.4.244] : " ip_address
 
 echo
 read -p "Enter ansible_user     [temp]          : " ansible_user
 
-ip_address=${ip_address:-192.168.69.244}
+ip_address=${ip_address:-192.168.4.244}
 ansible_user=${ansible_user:-temp}
 
 cat ./hosts.tpl > hosts

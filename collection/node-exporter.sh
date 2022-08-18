@@ -18,8 +18,8 @@ export ANSIBLE_ROLES_PATH=./roles:../roles
 # fi
 
 echo
-read -p "Enter node ip address  [192.168.69.107] : " ip_address
-ip_address=${ip_address:-192.168.69.107}
+read -p "Enter node ip address  [192.168.4.107] : " ip_address
+ip_address=${ip_address:-192.168.4.107}
 
 echo
 read -p "Enter ansible_user     [debian]        : " ansible_user

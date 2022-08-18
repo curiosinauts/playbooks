@@ -19,11 +19,11 @@ export ANSIBLE_ROLES_PATH=./roles:../roles:~/.ansible/roles
 
 
 echo
-read -p "Enter node ip address  [192.168.69.117] : " ip_address
+read -p "Enter node ip address  [192.168.4.117] : " ip_address
 echo
 read -p "Enter ansible_user     [debian]        : " ansible_user
 
-ip_address=${ip_address:-192.168.69.117}
+ip_address=${ip_address:-192.168.4.117}
 ansible_user=${ansible_user:-debian}
 
 cat ./hosts.tpl > hosts
