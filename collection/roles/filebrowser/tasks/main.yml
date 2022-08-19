@@ -47,13 +47,6 @@
     rm -f filebrowser.db || true
     filebrowser config init
     filebrowser config set --address 0.0.0.0
-    filebrowser config set --perm.create=false
-    filebrowser config set --perm.delete=false
-    filebrowser config set --perm.download=true
-    filebrowser config set --perm.execute=false
-    filebrowser config set --perm.modify=false
-    filebrowser config set --perm.rename=false
-    filebrowser config set --perm.share=true
     filebrowser config set --root {{root_dir}}
     filebrowser users add admin {{admin_password}} --perm.admin
     exit $?
