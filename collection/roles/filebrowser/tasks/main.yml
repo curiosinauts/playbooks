@@ -1,0 +1,68 @@
+---
+
+- name: Install Packages
+  apt: 
+    name:
+      - nfs-common
+    state: present
+    autoclean: yes   
+
+- name: Download File Browser binary
+  unarchive:
+    src: https://github.com/filebrowser/filebrowser/releases/download/v2.22.4/linux-amd64-filebrowser.tar.gz
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755    
+    remote_src: yes
+
+- name: Copy File Browser startup script
+  copy:
+    src: files/filebrowser.sh
+    dest: /usr/local/bin/filebrowser.sh
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart filebrowser    
+
+- name: Copy File Browser service script
+  copy:
+    src: files/filebrowser.service
+    dest: /etc/systemd/system/filebrowser.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart filebrowser
+
+- name: Configure File Browser NFS mount
+  shell: |
+    mkdir -p /mnt/data
+    echo "192.168.4.33:/mnt/data /mnt/data nfs defaults 0 0" >> /etc/fstab
+    mount -t nfs 192.168.4.33:/mnt/data /mnt/data
+    exit $?
+
+- name: Configure File Browser DB 
+  shell: |
+    cd /home/debian
+    rm -f filebrowser.db || true
+    filebrowser config init
+    filebrowser config set --address 0.0.0.0
+    filebrowser config set --perm.create=false
+    filebrowser config set --perm.delete=false
+    filebrowser config set --perm.download=true
+    filebrowser config set --perm.execute=false
+    filebrowser config set --perm.modify=false
+    filebrowser config set --perm.rename=false
+    filebrowser config set --perm.share=true
+    filebrowser config set --root {{root_dir}}
+    filebrowser users add admin {{admin_password}} --perm.admin
+    exit $?
+  become: true
+  become_user: debian
+  become_method: sudo      
+
+- name: Enable and start File Browser service
+  service:
+    name: filebrowser
+    state: started
+    enabled: yes    

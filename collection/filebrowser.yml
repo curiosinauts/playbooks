@@ -1,0 +1,13 @@
+---
+
+- name: filebrowser 
+  hosts: nodes
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  vars: 
+    root_dir: "{{ root_dir }}"
+    admin_password: "{{ admin_password }}"
+  roles:
+    - filebrowser

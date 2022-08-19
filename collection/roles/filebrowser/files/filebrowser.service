@@ -1,0 +1,18 @@
+[Unit]
+Description="File Browser"
+Documentation=https://filebrowser.org/
+Requires=network-online.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=debian
+Group=debian
+ExecStart=/usr/local/bin/filebrowser.sh
+ExecReload=/usr/local/bin/filebrowser reload
+KillMode=control-group
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
