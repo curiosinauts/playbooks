@@ -36,9 +36,9 @@
 
 - name: Configure File Browser NFS mount
   shell: |
-    mkdir -p /mnt/data
-    echo "192.168.4.33:/mnt/data /mnt/data nfs defaults 0 0" >> /etc/fstab
-    mount -t nfs 192.168.4.33:/mnt/data /mnt/data
+    mkdir -p {{root_dir}}
+    echo "{{nfs_host}}:{{root_dir}} {{root_dir}} nfs defaults 0 0" >> /etc/fstab
+    mount -t nfs {{nfs_host}}:{{root_dir}} {{root_dir}}
     exit $?
 
 - name: Configure File Browser DB 

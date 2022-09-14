@@ -9,5 +9,7 @@
   vars: 
     root_dir: "{{ root_dir }}"
     admin_password: "{{ admin_password }}"
+    nfs_host: "{{ nfs_host }}"    
+    mount_path: "{{ mount_path }}"
   roles:
     - filebrowser
