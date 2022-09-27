@@ -5,7 +5,5 @@
   become: true
   become_user: root
   become_method: sudo  
-  vars: 
-    user: "{{ username }}"
   roles:
     - role: base 

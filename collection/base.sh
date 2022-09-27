@@ -19,16 +19,13 @@ echo
 read -p "Enter node ip address             : " ip_address
 echo
 read -p "Enter ansible user     [debian]   : " ansible_user
-echo
-read -p "Enter username         [debian]   : " user
 
 ip_address=${ip_address:-192.168.4.119}
 ansible_user=${ansible_user:-debian}
-username=${username:-debian}
 
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts
 
-ansible-playbook -i hosts -e "ansible_user=${ansible_user} username=${username}" base.yml    
+ansible-playbook -i hosts -e "ansible_user=${ansible_user}" base.yml    
 
 rm -f hosts || true
