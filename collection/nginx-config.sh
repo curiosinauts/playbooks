@@ -28,6 +28,6 @@ ansible_user=${ansible_user:-debian}
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
-ansible-playbook -i hosts -e "ansible_user=${ansible_user}" external-nginx-config.yml    
+ansible-playbook -i hosts -e "ansible_user=${ansible_user}" nginx-config.yml    
 
 rm -f hosts || true

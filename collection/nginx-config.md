@@ -2,5 +2,5 @@
 - geoipupdate
 - nginx 
 - certbot
-- external-nginx-config
+- nginx-config
 - fluentd
