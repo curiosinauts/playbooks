@@ -10,8 +10,26 @@ k3s role is design for vagrant local environment. The metallb ip address range i
 ## Manual install of metallb
 ```
 helm repo add metallb https://metallb.github.io/metallb
+
 kubectl create namespace metallb-system
-helm install metallb metallb/metallb --wait -f /tmp/k3s/metallb-values.yaml --namespace metallb-system
-kubectl apply -f /tmp/k3s/l2-address-pool.yaml
-kubectl apply -f /tmp/k3s/l2-advertisement.yaml
+
+helm install metallb metallb/metallb --wait --namespace metallb-system
+
+cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: internal-addresses
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.56.101-192.168.56.200
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: l2
+  namespace: metallb-system
+EOF
+
 ```
