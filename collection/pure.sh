@@ -32,6 +32,6 @@ username=${username:-debian}
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
-ansible-playbook -i hosts -e "username=${username} ansible_user=${ansible_user}" pure.yml    
+ansible-playbook -i hosts -e "target=nodes username=${username} ansible_user=${ansible_user}" pure.yml    
 
 rm -f hosts || true
