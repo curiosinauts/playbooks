@@ -1,0 +1,10 @@
+---
+
+- name: k3s 
+  hosts: "{{ target }}" 
+  become: yes
+  become_user: root
+  become_method: sudo  
+  any_errors_fatal: true
+  roles:
+    - k3s 

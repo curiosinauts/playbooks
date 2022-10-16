@@ -1,0 +1,35 @@
+---
+
+- name: Install tools
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+    name:
+      - curl
+    state: present      
+
+
+- name: Copy metallb related files 
+  copy:
+    src: files/
+    dest: /tmp/k3s
+    mode: 0644
+    owner: root
+    group: root
+
+
+- name: k3s
+  shell: |
+    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable servicelb" sh -
+    cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    helm repo add metallb https://metallb.github.io/metallb
+    kubectl create namespace metallb-system
+    helm install metallb metallb/metallb --wait -f /tmp/k3s/metallb-values.yaml --namespace metallb-system
+    kubectl apply -f /tmp/k3s/l2-address-pool.yaml
+    kubectl apply -f /tmp/k3s/l2-advertisement.yaml
+
+
+
