@@ -63,9 +63,9 @@ clean() {
         rm -rf ~/.vbox/test/"${organization}"/"${box}"
     fi
 
-    rm -rf ~/.vbox/build/"${organization}"/"${box}"
-
     vagrant box remove --force "${organization}"/"${box}" || true
+
+    rm -rf ~/.vbox/build/"${organization}"/"${box}"
 }
 
 build() {
