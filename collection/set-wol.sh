@@ -14,15 +14,12 @@ read -p "Enter ansible_user     [debian]            : " ansible_user
 ansible_user=${ansible_user:-debian}
 
 echo
-read -p "Enter email            [cloudflare email]  : " email
-email=${email:-admin@curiosityworks.org}
-
-echo
-read -p "Enter cloudflare api_key                   : " api_key
+read -p "Enter interface name   [eno1]              : " interface
+interface=${interface:-eno1}
 
 cat ./hosts.tpl > hosts
 echo "${ip_address}" >> hosts 
 
-ansible-playbook -i hosts -K -e "ansible_user=${ansible_user} email=${email} api_key=${api_key}" certbot.yml    
+ansible-playbook -i hosts -K -e "ansible_user=${ansible_user} interface=${interface}" set-wol.yml
 
 rm -f hosts || true

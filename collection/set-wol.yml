@@ -1,0 +1,12 @@
+---
+
+- name: wake-on-lan
+  hosts: nodes
+  become: yes
+  become_user: root
+  become_method: sudo
+  any_errors_fatal: true
+  vars:
+    interface: "{{ interface }}"
+  roles:
+    - set-wol

@@ -1,0 +1,23 @@
+---
+
+- name: Copy set-wol startup script
+  template:
+    src: set-wol.sh.j2 
+    dest: /usr/local/sbin/set-wol.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy set-wol service script
+  copy:
+    src: files/set-wol.service
+    dest: /etc/systemd/system/set-wol.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start set-wol service
+  service:
+    name: set-wol
+    state: started
+    enabled: yes  

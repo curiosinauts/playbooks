@@ -1,0 +1,10 @@
+[Unit]
+Description=Set Wake-on-LAN
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/set-wol.sh
+
+[Install]
+WantedBy=multi-user.target
