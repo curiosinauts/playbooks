@@ -13,7 +13,18 @@ helm repo add metallb https://metallb.github.io/metallb
 
 kubectl create namespace metallb-system
 
-helm install metallb metallb/metallb --wait --namespace metallb-system
+helm show values metallb/metallb > values.yaml
+
+set the namespace to within values.yaml: "metallb-system"
+add the following to namespace
+```
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
+```
+
+helm install metallb metallb/metallb --wait --namespace metallb-system -f values.yaml
 
 cat <<EOF | kubectl apply -f -
 apiVersion: metallb.io/v1beta1
