@@ -1,0 +1,36 @@
+---
+# Deploy postgresql
+
+- name: Copy postgresql proxy socket file
+  copy:
+    src: files/postgresql-proxy.socket
+    dest: /etc/systemd/system/postgresql-proxy.socket
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy postgresql proxy service file
+  copy:
+    src: files/postgresql-proxy.service
+    dest: /etc/systemd/system/postgresql-proxy.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure postgresql socket proxy is enabled and started
+  systemd:
+    name: postgresql-proxy.socket
+    enabled: yes
+    state: started
+
+- name: Enable and start postgresql service
+  service:
+    name: postgresql.service
+    enabled: yes
+    state: started
+
+- name: Ensure postgresql socket proxy service is enabled and started
+  service:
+    name: postgresql-proxy.service
+    enabled: yes
+    state: started

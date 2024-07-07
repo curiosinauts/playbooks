@@ -1,0 +1,8 @@
+[Unit]
+Description=Socket activation for Postgresql service
+
+[Socket]
+ListenStream=15432
+
+[Install]
+WantedBy=sockets.target
