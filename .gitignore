@@ -11,3 +11,4 @@ boxes
 test
 .DS_Store
 .build.vbox
+sudo_password.txt
