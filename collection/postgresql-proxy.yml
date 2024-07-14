@@ -2,8 +2,8 @@
 # -------------------------------------------------------------------------------------
 # Postgresql socket activation using proxy
 # -------------------------------------------------------------------------------------
-- name: postgresql-proxy 
-  hosts: nodes
+- name: postgresql-proxy
+  hosts: localhost
   become: yes
   become_user: root
   become_method: sudo
@@ -11,4 +11,4 @@
   vars:
     username: "{{ username }}"
   roles:
-    - postgresql-proxy 
+    - postgresql-proxy

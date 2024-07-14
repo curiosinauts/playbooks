@@ -1,5 +1,5 @@
 [Unit]
-Description=Socket activation proxy for Postgresql service 
+Description=Socket activation proxy for Postgresql service
 
 ## Stop also when stopped listening for socket-activation.
 BindsTo=postgresql-proxy.socket
@@ -12,4 +12,5 @@ After=postgresql.service
 
 [Service]
 ExecStart=/lib/systemd/systemd-socket-proxyd --exit-idle-time=3600s 127.0.0.1:5432
-ExecStop=/usr/bin/systemctl stop postgresql.service
+# This is not ideal but it takes about 60 seconds to cause timeout to forcefully kill
+ExecStop=/usr/bin/systemctl stop -f postgresql.service
